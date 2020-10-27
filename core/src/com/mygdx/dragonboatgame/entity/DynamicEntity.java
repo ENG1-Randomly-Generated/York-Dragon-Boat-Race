@@ -1,5 +1,6 @@
 package com.mygdx.dragonboatgame.entity;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.dragonboatgame.util.Vector;
 
@@ -31,11 +32,15 @@ public abstract class DynamicEntity extends Entity {
     }
 
 
-    // TODO: Change this for smoothness etc
-    // LERP? We need to consider movement cannot change upon render rate
+    /**
+     * Moves the entity based on it's current velocity
+     */
     public void move() {
-        this.pos.x += this.velocity.x;
-        this.pos.y += this.velocity.y;
+        if (this.velocity.isZero()) return; // No movement needed if velocity is 0
+
+        float delta = Gdx.graphics.getDeltaTime();
+        this.pos.x += this.velocity.x * delta;
+        this.pos.y += this.velocity.y * delta;
     }
 
     public void tick() {

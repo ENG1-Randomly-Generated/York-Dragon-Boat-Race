@@ -11,7 +11,7 @@ public class Duck extends MovableObstacle {
     public Duck(Vector pos) {
         super(new Texture(Gdx.files.internal("entity/duck.png")), pos, new Vector(30,30));
 
-        this.addVelocity(1, 1); // TODO: Remove this its just for testing
+        this.addVelocity(10, 10); // TODO: Remove this its just for testing
     }
 
     @Override

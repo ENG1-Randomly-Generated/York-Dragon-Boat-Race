@@ -26,6 +26,10 @@ public class Vector {
         this.y += y;
     }
 
+    public boolean isZero() {
+        return this.x == 0 && this.y == 0;
+    }
+
     public boolean equals(Object other) {
         if (other instanceof Vector) {
             Vector otherVector = (Vector) other;
