@@ -13,10 +13,12 @@ import com.mygdx.dragonboatgame.util.Vector;
 public abstract class DynamicEntity extends Entity {
 
     protected Vector velocity;
+    protected Vector acceleration;
 
     public DynamicEntity(Texture texture, Vector pos, Vector size) {
         super(texture, pos, size);
         this.velocity = new Vector(0,0);
+        this.acceleration = new Vector(0,0);
     }
 
 
@@ -31,11 +33,34 @@ public abstract class DynamicEntity extends Entity {
         return this.velocity;
     }
 
+    /**
+     * Set acceleration to given x, y
+     * @param x x axis acceleration
+     * @param y y axis acceleration
+     */
+    public void setAcceleration(float x, float y) {
+        this.acceleration.x = x;
+        this.acceleration.y = y;
+    }
+
+    public void addAcceleration(float x, float y) {
+        this.acceleration.x += x;
+        this.acceleration.y += y;
+    }
+
+
+    /**
+     * Accelerate the current entity by our acceleration
+     */
+    private void accelerate() {
+        this.velocity.add(this.acceleration);
+    }
 
     /**
      * Moves the entity based on it's current velocity
      */
     public void move() {
+        this.accelerate();
         if (this.velocity.isZero()) return; // No movement needed if velocity is 0
 
         float delta = Gdx.graphics.getDeltaTime();
@@ -43,8 +68,15 @@ public abstract class DynamicEntity extends Entity {
         this.pos.y += this.velocity.y * delta;
     }
 
+
+    public abstract void onCollide(Entity other);
+
     public void tick() {
         this.move();
+        Entity touching = this.getTouching();
+        if (touching != null) {
+            this.onCollide(touching);
+        }
     }
 
 

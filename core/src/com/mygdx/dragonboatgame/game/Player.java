@@ -1,5 +1,7 @@
 package com.mygdx.dragonboatgame.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.mygdx.dragonboatgame.entity.Boat;
 
@@ -18,8 +20,21 @@ public class Player extends Team {
         super(name, color, boat);
     }
 
+
+    private void checkInput() {
+        boolean up = Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.UP);
+        boolean right = Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT);
+        boolean down = Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.DOWN);
+        boolean left = Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT);
+
+        this.boat.accelerate(up, right, down, left);
+    }
+
+
     @Override
     public void tick() {
+        this.boat.tick();
+        this.checkInput();
     }
 
 }

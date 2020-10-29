@@ -2,6 +2,7 @@ package com.mygdx.dragonboatgame.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.mygdx.dragonboatgame.DragonBoatGame;
 import com.mygdx.dragonboatgame.entity.Boat;
 import com.mygdx.dragonboatgame.entity.Entity;
@@ -20,6 +21,9 @@ import java.util.Random;
  * @author Devon
  */
 public class Game {
+
+    public static final float WIDTH = Gdx.graphics.getWidth();
+    public static final float HEIGHT = Gdx.graphics.getHeight();
 
     public static HashMap<String, Boat> BOATS = new HashMap<String, Boat>();
 
@@ -41,6 +45,7 @@ public class Game {
     private Player player;
     private ArrayList<NPC> npcs;
     private ArrayList<Entity> entities;
+    private ShapeRenderer shapeRenderer;
 
     /**
      * Constructor of a Game for the given Player
@@ -52,6 +57,8 @@ public class Game {
         this.npcs = new ArrayList<NPC>(3);
         this.entities = new ArrayList<Entity>();
         this.player = player;
+        this.shapeRenderer = new ShapeRenderer();
+        this.shapeRenderer.setAutoShapeType(true);
     }
 
 
@@ -64,7 +71,7 @@ public class Game {
         for (NPC npc : npcs) {
             npc.tick();
         }
-        for (Entity entity: entities) {
+        for (Entity entity: Entity.entities) {
             entity.tick();
         }
     }
@@ -75,11 +82,23 @@ public class Game {
      *  Calls all of it's known entities' draw functions
      */
     public void draw() {
+
+        shapeRenderer.begin();
+        shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(Color.GREEN);
+        shapeRenderer.rect(0, 0, Game.WIDTH / 8, Game.HEIGHT);
+        shapeRenderer.setColor(Color.BLUE);
+        shapeRenderer.rect((Game.WIDTH / 8), 0, (Game.WIDTH / 8) * 6, Game.HEIGHT);
+        shapeRenderer.setColor(Color.GREEN);
+        shapeRenderer.rect((Game.WIDTH / 8) * 7, 0, Game.WIDTH / 8, Game.HEIGHT);
+        shapeRenderer.end();
+
+
         player.boat.draw();
         for (NPC npc: npcs) {
             npc.boat.draw();
         }
-        for (Entity entity: entities) {
+        for (Entity entity: Entity.entities) {
             entity.draw();
         }
     }

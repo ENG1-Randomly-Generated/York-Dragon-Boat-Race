@@ -1,8 +1,12 @@
 package com.mygdx.dragonboatgame.entity;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.mygdx.dragonboatgame.util.Vector;
+
+import java.util.ArrayList;
 
 /**
  * Represents an Entity within the game
@@ -12,11 +16,17 @@ import com.mygdx.dragonboatgame.util.Vector;
  */
 public abstract class Entity {
 
+    private static final boolean DEBUG_HITBOXES = true;
+
+    public static ArrayList<Entity> entities = new ArrayList<Entity>();
+
     protected Vector pos;
     protected Vector size;
     protected SpriteBatch batch;
+    protected ShapeRenderer shapeRenderer;
     protected Texture texture;
     protected boolean isVisible;
+    protected boolean active;
 
 
     public Entity(Texture texture, Vector pos, Vector size) {
@@ -25,6 +35,39 @@ public abstract class Entity {
         this.pos = pos;
         this.size = size;
         this.isVisible = true;
+        this.active = true;
+        this.shapeRenderer = new ShapeRenderer();
+        this.shapeRenderer.setAutoShapeType(true);
+
+        entities.add(this); // Register this entity in global list
+    }
+
+    /**
+     * Returns whether the two entities are touching
+     *
+     * @param other Other entity
+     * @return Whether entities are touching
+     */
+    public boolean isTouching(Entity other) {
+        return (this.pos.x < other.pos.x + other.size.x)
+                && (other.pos.x < this.pos.x + this.size.x)
+                && (this.pos.y < other.pos.y + other.size.y)
+                && (other.pos.y < this.pos.y + this.size.y);
+    }
+
+    /**
+     * Returns the entity this entity is touching, or null
+     *
+     * @return The Entity touching this one, or null if nothing touching
+     */
+    public Entity getTouching() {
+        for (Entity e : Entity.entities) {
+            if (e == this) continue;
+            if (this.isTouching(e)) {
+                return e;
+            }
+        }
+        return null;
     }
 
     public void setPos(Vector pos) {
@@ -45,9 +88,18 @@ public abstract class Entity {
         batch.begin();
         batch.draw(texture, pos.x, pos.y, size.x, size.y);
         batch.end();
+
+        if (DEBUG_HITBOXES) {
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            shapeRenderer.setColor(Color.RED);
+            shapeRenderer.rect(pos.x, pos.y, size.x, size.y);
+            shapeRenderer.end();
+        }
     }
 
 
     public abstract void tick();
+
+
 
 }

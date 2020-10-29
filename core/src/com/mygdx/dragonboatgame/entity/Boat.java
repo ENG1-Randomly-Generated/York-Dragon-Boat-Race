@@ -2,6 +2,7 @@ package com.mygdx.dragonboatgame.entity;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.dragonboatgame.util.Vector;
 
@@ -12,6 +13,8 @@ import com.mygdx.dragonboatgame.util.Vector;
  * @author Devon
  */
 public class Boat extends DynamicEntity {
+
+    private static final float RESISTANCE = 1;
 
     protected String name;
 
@@ -33,11 +36,37 @@ public class Boat extends DynamicEntity {
         this.playing = false;
     }
 
+    public void accelerate(boolean up, boolean right, boolean down, boolean left) {
+        float dx = 0;
+        float dy = 0;
+
+        if (up) {
+            dy += maneuverability;
+        }
+        if (right) {
+            dx += maneuverability;
+        }
+        if (down) {
+            dy -= maneuverability;
+        }
+        if (left) {
+            dx -= maneuverability;
+        }
+
+        this.setAcceleration(dx, dy);
+    }
+
     @Override
     public void move() {
+        super.move();
+    }
+
+    @Override
+    public void onCollide(Entity other) {
     }
 
     @Override
     public void tick() {
+        super.tick();
     }
 }
