@@ -1,5 +1,6 @@
 package com.mygdx.dragonboatgame.entity;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
  */
 public abstract class Entity {
 
-    private static final boolean DEBUG_HITBOXES = true;
+    private static final boolean DEBUG_HITBOXES = false;
 
     public static ArrayList<Entity> entities = new ArrayList<Entity>();
 
@@ -82,14 +83,16 @@ public abstract class Entity {
     public void setVisible(boolean visible) { isVisible = visible; }
 
 
-    public void draw() {
+    public void draw(Camera camera) {
         if (!isVisible) return;
 
+        batch.setProjectionMatrix(camera.combined);
         batch.begin();
         batch.draw(texture, pos.x, pos.y, size.x, size.y);
         batch.end();
 
         if (DEBUG_HITBOXES) {
+            shapeRenderer.setProjectionMatrix(camera.combined);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
             shapeRenderer.setColor(Color.RED);
             shapeRenderer.rect(pos.x, pos.y, size.x, size.y);

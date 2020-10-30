@@ -2,9 +2,10 @@ package com.mygdx.dragonboatgame.entity.obstacle;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.mygdx.dragonboatgame.entity.Entity;
 import com.mygdx.dragonboatgame.util.Vector;
 
-public class Log extends MovableObstacle {
+public class Log extends Obstacle {
 
 
     public Log(Vector pos) {
@@ -12,10 +13,17 @@ public class Log extends MovableObstacle {
     }
 
     @Override
-    public void move() {
+    public void tick() {
+        super.tick();
     }
 
     @Override
-    public void tick() {
+    public void onCollide(Entity other) {
+        super.onCollide(other);
+    }
+
+    @Override
+    public void move() {
+        super.move();
     }
 }

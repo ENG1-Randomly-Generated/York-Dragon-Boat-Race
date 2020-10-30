@@ -29,6 +29,7 @@ public abstract class DynamicEntity extends Entity {
     public void setVelocity(Vector velocity) {
         this.velocity = velocity;
     }
+    public void setVelocity(float x, float y) { this.velocity.x = x; this.velocity.y = y;}
     public Vector getVelocity() {
         return this.velocity;
     }
@@ -48,12 +49,21 @@ public abstract class DynamicEntity extends Entity {
         this.acceleration.y += y;
     }
 
+    public Vector getAcceleration() {
+        return this.acceleration;
+    }
+
 
     /**
      * Accelerate the current entity by our acceleration
      */
     private void accelerate() {
         this.velocity.add(this.acceleration);
+        this.addAcceleration(-this.getAcceleration().x / 100, -this.getAcceleration().y / 100);
+    }
+
+    private void decelelerate() {
+        this.addVelocity(-this.getVelocity().x / 100, -this.getVelocity().y / 100);
     }
 
     /**
@@ -66,6 +76,8 @@ public abstract class DynamicEntity extends Entity {
         float delta = Gdx.graphics.getDeltaTime();
         this.pos.x += this.velocity.x * delta;
         this.pos.y += this.velocity.y * delta;
+
+        this.decelelerate();
     }
 
 

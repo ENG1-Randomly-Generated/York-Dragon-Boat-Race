@@ -25,6 +25,8 @@ public class NPC extends Team {
 
     @Override
     public void tick() {
+        this.boat.tick();
+        this.boat.accelerate(true, false, false, false);
     }
 
 

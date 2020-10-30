@@ -26,6 +26,10 @@ public class Vector {
         this.y += y;
     }
 
+    public float getMagnitude() {
+        return (float) Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
+    }
+
     public boolean isZero() {
         return this.x == 0 && this.y == 0;
     }
@@ -37,6 +41,10 @@ public class Vector {
         }
 
         return false;
+    }
+
+    public String toString() {
+        return "(" + this.x + ", " + this.y + ")";
     }
 
 }

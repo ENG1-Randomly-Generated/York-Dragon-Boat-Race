@@ -7,6 +7,8 @@ import com.mygdx.dragonboatgame.DragonBoatGame;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+		config.height = 720;
+		config.width = 1028;
 		new LwjglApplication(new DragonBoatGame(), config);
 	}
 }

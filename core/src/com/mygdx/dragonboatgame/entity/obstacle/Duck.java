@@ -7,7 +7,7 @@ import com.mygdx.dragonboatgame.entity.Entity;
 import com.mygdx.dragonboatgame.game.Game;
 import com.mygdx.dragonboatgame.util.Vector;
 
-public class Duck extends MovableObstacle {
+public class Duck extends Obstacle {
 
     private long randomMoveCooldown;
 
@@ -23,6 +23,7 @@ public class Duck extends MovableObstacle {
 
     @Override
     public void onCollide(Entity other) {
+        super.onCollide(other);
     }
 
     @Override

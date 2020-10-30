@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.dragonboatgame.entity.Boat;
 import com.mygdx.dragonboatgame.entity.DynamicEntity;
 import com.mygdx.dragonboatgame.entity.Entity;
+import com.mygdx.dragonboatgame.game.Game;
 import com.mygdx.dragonboatgame.util.Vector;
 
 /**
@@ -12,11 +13,11 @@ import com.mygdx.dragonboatgame.util.Vector;
  *
  * @author Devon
  */
-public abstract class MovableObstacle extends DynamicEntity {
+public abstract class Obstacle extends DynamicEntity {
 
     private int damage;
 
-    public MovableObstacle(Texture texture, Vector pos, Vector size) {
+    public Obstacle(Texture texture, Vector pos, Vector size) {
         super(texture, pos, size);
     }
 
@@ -24,7 +25,18 @@ public abstract class MovableObstacle extends DynamicEntity {
     public void onCollide(Entity other) {
         if (other instanceof Boat) {
             Boat boat = (Boat) other;
-            // Do damage here :o
+            boat.damage(0.01f);
+            this.setVelocity(0, 0);
+            boat.setVelocity(0, 0);
+        }
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+
+        if (this.getPos().x < Game.GRASS_BORDER_WIDTH || this.getPos().x > Game.WIDTH - Game.GRASS_BORDER_WIDTH) {
+            this.setVelocity(0, 0);
         }
     }
 }

@@ -2,6 +2,7 @@ package com.mygdx.dragonboatgame.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.mygdx.dragonboatgame.DragonBoatGame;
 import com.mygdx.dragonboatgame.entity.Boat;
@@ -9,6 +10,7 @@ import com.mygdx.dragonboatgame.entity.Entity;
 import com.mygdx.dragonboatgame.entity.obstacle.Duck;
 import com.mygdx.dragonboatgame.entity.obstacle.Goose;
 import com.mygdx.dragonboatgame.entity.obstacle.Log;
+import com.mygdx.dragonboatgame.entity.obstacle.Rock;
 import com.mygdx.dragonboatgame.util.Vector;
 
 import java.util.ArrayList;
@@ -24,17 +26,20 @@ public class Game {
 
     public static final float WIDTH = Gdx.graphics.getWidth();
     public static final float HEIGHT = Gdx.graphics.getHeight();
+    public static final float MAP_HEIGHT = 6000;
+    public static final float GRASS_BORDER_WIDTH = WIDTH/8;
 
-    public static HashMap<String, Boat> BOATS = new HashMap<String, Boat>();
+    private static HashMap<String, int[]> BOATS = new HashMap<String, int[]>();
 
     /*
      * Declare our predefined boats here and append to the master HashMap
      * Name (String) : Boat (Boat)
      */
     static {
-        BOATS.put("Speedy", new Boat("Speedy", 10, 5, 2));
-        BOATS.put("Twisty", new Boat("Twisty", 6, 10, 4));
-        BOATS.put("Tanky", new Boat("Tanky", 4, 3, 10));
+        // {max_speed, manovourability, max_robustness)
+        BOATS.put("Speedy", new int[] {22, 14, 2});
+        BOATS.put("Twisty", new int[] {20, 19, 4});
+        BOATS.put("Tanky", new int[] {18, 15, 10});
     }
 
     public static Random random = new Random();
@@ -46,6 +51,8 @@ public class Game {
     private ArrayList<NPC> npcs;
     private ArrayList<Entity> entities;
     private ShapeRenderer shapeRenderer;
+
+    private OrthographicCamera camera;
 
     /**
      * Constructor of a Game for the given Player
@@ -59,6 +66,23 @@ public class Game {
         this.player = player;
         this.shapeRenderer = new ShapeRenderer();
         this.shapeRenderer.setAutoShapeType(true);
+
+        this.camera = new OrthographicCamera(Game.WIDTH, Game.HEIGHT);
+        camera.setToOrtho(false);
+    }
+
+    /**
+     * Start a leg
+     */
+    public void startLeg() {
+        float seperation = ((Game.WIDTH - (2 * GRASS_BORDER_WIDTH)) / (npcs.size() + 1));
+        player.boat.setPos(new Vector(GRASS_BORDER_WIDTH, 0));
+        player.boat.setPlaying(true);
+        for (int i = 0; i < npcs.size(); i++) {
+            NPC npc = npcs.get(i);
+            npc.boat.setPos(new Vector(Game.GRASS_BORDER_WIDTH + (seperation * (i+1)), 0));
+            npc.boat.setPlaying(true);
+        }
     }
 
 
@@ -71,9 +95,13 @@ public class Game {
         for (NPC npc : npcs) {
             npc.tick();
         }
-        for (Entity entity: Entity.entities) {
+        for (Entity entity: entities) {
             entity.tick();
         }
+
+        // Update camera
+        camera.position.set(camera.position.x, Math.min(Math.max(player.boat.getPos().y, Game.HEIGHT/2), Game.MAP_HEIGHT - Game.HEIGHT/2), 0);
+        camera.update();
     }
 
     /**
@@ -83,24 +111,26 @@ public class Game {
      */
     public void draw() {
 
+        shapeRenderer.setProjectionMatrix(camera.combined);
         shapeRenderer.begin();
         shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.GREEN);
-        shapeRenderer.rect(0, 0, Game.WIDTH / 8, Game.HEIGHT);
+        shapeRenderer.rect(0, 0, GRASS_BORDER_WIDTH, Game.MAP_HEIGHT);
         shapeRenderer.setColor(Color.BLUE);
-        shapeRenderer.rect((Game.WIDTH / 8), 0, (Game.WIDTH / 8) * 6, Game.HEIGHT);
+        shapeRenderer.rect(GRASS_BORDER_WIDTH, 0, WIDTH -  (2 * GRASS_BORDER_WIDTH), Game.MAP_HEIGHT);
         shapeRenderer.setColor(Color.GREEN);
-        shapeRenderer.rect((Game.WIDTH / 8) * 7, 0, Game.WIDTH / 8, Game.HEIGHT);
+        shapeRenderer.rect(Game.WIDTH - GRASS_BORDER_WIDTH, 0, GRASS_BORDER_WIDTH, Game.MAP_HEIGHT);
         shapeRenderer.end();
 
 
-        player.boat.draw();
+        player.boat.draw(camera);
         for (NPC npc: npcs) {
-            npc.boat.draw();
+            npc.boat.draw(camera);
         }
-        for (Entity entity: Entity.entities) {
-            entity.draw();
+        for (Entity entity: entities) {
+            entity.draw(camera);
         }
+
     }
 
 
@@ -118,13 +148,20 @@ public class Game {
      */
     public void generateObstacles(int n) {
         for (int i = 0; i < n; i++) {
-            switch (Game.random.nextInt(3)) {
+            Vector newPos = new Vector(random.nextInt((int)(Game.WIDTH - (2*Game.GRASS_BORDER_WIDTH))) + Game.GRASS_BORDER_WIDTH, random.nextInt((int)Game.MAP_HEIGHT));
+            switch (Game.random.nextInt(4)) {
                 case 1:
-                    this.addEntity(new Duck(new Vector(random.nextInt(Gdx.graphics.getWidth()), random.nextInt(Gdx.graphics.getHeight()))));
+                    this.addEntity(new Duck(newPos));
+                    break;
                 case 2:
-                    this.addEntity(new Goose(new Vector(random.nextInt(Gdx.graphics.getWidth()), random.nextInt(Gdx.graphics.getHeight()))));
+                    this.addEntity(new Goose(newPos));
+                    break;
                 case 3:
-                    this.addEntity(new Log(new Vector(random.nextInt(Gdx.graphics.getWidth()), random.nextInt(Gdx.graphics.getHeight()))));
+                    this.addEntity(new Log(newPos));
+                    break;
+                case 4:
+                    this.addEntity(new Rock(newPos));
+                    break;
             }
         }
     }
@@ -137,9 +174,8 @@ public class Game {
      */
     public void addRandomNPCs(int n, int difficulty) {
         for (int i = 0; i < n; i++) {
-            this.npcs.add(
-                    new NPC("Bot" + npcs.size(), new Color(random.nextFloat(), random.nextFloat(), random.nextFloat(), 1), Game.getRandomBoat(), difficulty)
-            );
+            NPC npc = new NPC("Bot" + npcs.size(), new Color(random.nextFloat(), random.nextFloat(), random.nextFloat(), 1), Game.getRandomBoat(), difficulty);
+            this.npcs.add(npc);
         }
     }
 
@@ -152,7 +188,15 @@ public class Game {
      * @return A random Boat
      */
     public static Boat getRandomBoat() {
-        return (Boat) BOATS.values().toArray()[random.nextInt(BOATS.size() - 1)];
+        String randomBoat = (String) BOATS.keySet().toArray()[random.nextInt(BOATS.size() - 1)];
+        int[] attrs = BOATS.get(randomBoat);
+        return new Boat(randomBoat, attrs[0], attrs[1], attrs[2]);
+    }
+
+    public static Boat getBoat(String name) {
+        if (!BOATS.containsKey(name)) throw new NullPointerException();
+        int[] attrs = BOATS.get(name);
+        return new Boat(name, attrs[0], attrs[1], attrs[2]);
     }
 
 

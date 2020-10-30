@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.dragonboatgame.util.Vector;
 
-public class Goose extends MovableObstacle {
+public class Goose extends Obstacle {
 
 
     public Goose(Vector pos) {
@@ -13,11 +13,11 @@ public class Goose extends MovableObstacle {
 
     @Override
     public void move() {
-
+        super.move();
     }
 
     @Override
     public void tick() {
-
+        super.tick();
     }
 }
