@@ -27,6 +27,7 @@ public class Boat extends DynamicEntity {
 
     protected float robustness;
     protected boolean playing;
+    protected float energy;
 
     private ShapeRenderer shapeRenderer;
 
@@ -38,29 +39,46 @@ public class Boat extends DynamicEntity {
         this.maneuverability = maneuverability;
         this.max_robustness = max_robustness;
         this.robustness = max_robustness;
+        this.energy = 100;
         this.playing = false;
         this.shapeRenderer = new ShapeRenderer();
         this.shapeRenderer.setAutoShapeType(true);
     }
 
+    /**
+     * Accelerate the boat in the given directions
+     *
+     * @param up Whether to accelerate up
+     * @param right Whether to accelerate right
+     * @param down Whether to accelerate down
+     * @param left Whether to accelerate left
+     */
     public void accelerate(boolean up, boolean right, boolean down, boolean left) {
         if (this.robustness == 0) return; // Cannot accelerate if dead
+        if (this.energy <= 0) return; // Cannot accelerate with no energy
+
+        //if (this.velocity.getMagnitude() >= this.max_speed) return; // Max velocity anyway, do not accelerate
 
         float dx = 0;
         float dy = 0;
 
         if (up) {
-            dy += maneuverability / 10;
+            dy += maneuverability / 20;
         }
         if (right) {
-            dx += maneuverability / 10;
+            dx += maneuverability / 20;
         }
         if (down) {
-            dy -= maneuverability / 10;
+            dy -= maneuverability / 20;
         }
         if (left) {
-            dx -= maneuverability / 10;
+            dx -= maneuverability / 20;
         }
+
+        if (dx == 0 && dy == 0) return;
+
+        this.energy -= 0.1; // TODO: Make this variable (difficulty.. etc)
+        if (this.energy < 0) this.energy = 0;
 
         this.addAcceleration(dx, dy);
     }
@@ -102,8 +120,12 @@ public class Boat extends DynamicEntity {
     @Override
     public void tick() {
         if (!playing) return;
-        super.tick();
+        if (this.getAcceleration().isZero()) {
+            this.energy += 0.5; // TODO: Change based on difficulty etc
+            if (energy > 100) energy = 100;
+        }
 
+        super.tick();
     }
 
     /**
@@ -119,9 +141,15 @@ public class Boat extends DynamicEntity {
 
         // HP bar
         shapeRenderer.setColor(Color.WHITE);
-        shapeRenderer.rect(this.getPos().x, this.getPos().y + (float)(this.getSize().y * 1.1), this.getSize().x, 10);
+        shapeRenderer.rect(this.getPos().x, this.getPos().y + (float)(this.getSize().y * 1.25), this.getSize().x, 10);
         shapeRenderer.setColor(Color.RED);
-        shapeRenderer.rect(this.getPos().x, this.getPos().y + (float)(this.getSize().y * 1.1), this.getSize().x * (robustness/max_robustness), 10);
+        shapeRenderer.rect(this.getPos().x, this.getPos().y + (float)(this.getSize().y * 1.25), this.getSize().x * (robustness/max_robustness), 10);
+
+        // Energy bar
+        shapeRenderer.setColor(Color.WHITE);
+        shapeRenderer.rect(this.getPos().x, this.getPos().y + (float)(this.getSize().y * 1.1), this.getSize().x, 10);
+        shapeRenderer.setColor(Color.GOLD);
+        shapeRenderer.rect(this.getPos().x, this.getPos().y + (float)(this.getSize().y * 1.1), this.getSize().x * (energy/100), 10);
 
         shapeRenderer.end();
     }
