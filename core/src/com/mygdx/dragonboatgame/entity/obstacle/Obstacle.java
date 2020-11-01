@@ -15,28 +15,19 @@ import com.mygdx.dragonboatgame.util.Vector;
  */
 public abstract class Obstacle extends DynamicEntity {
 
-    private int damage;
+    private boolean broken;
 
     public Obstacle(Texture texture, Vector pos, Vector size) {
         super(texture, pos, size);
     }
 
+
     @Override
     public void onCollide(Entity other) {
-        if (other instanceof Boat) {
-            Boat boat = (Boat) other;
-            boat.damage(0.01f);
-            this.setVelocity(0, 0);
-            boat.setVelocity(0, 0);
-        }
     }
 
     @Override
     public void tick() {
         super.tick();
-
-        if (this.getPos().x < Game.GRASS_BORDER_WIDTH || this.getPos().x > Game.WIDTH - Game.GRASS_BORDER_WIDTH) {
-            this.setVelocity(0, 0);
-        }
     }
 }

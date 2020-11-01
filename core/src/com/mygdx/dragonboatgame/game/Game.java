@@ -123,12 +123,15 @@ public class Game {
         shapeRenderer.end();
 
 
+
+        for (Entity entity: entities) {
+            entity.draw(camera);
+        }
+
+        // Draw boats last so they're top of entities
         player.boat.draw(camera);
         for (NPC npc: npcs) {
             npc.boat.draw(camera);
-        }
-        for (Entity entity: entities) {
-            entity.draw(camera);
         }
 
     }
@@ -150,16 +153,16 @@ public class Game {
         for (int i = 0; i < n; i++) {
             Vector newPos = new Vector(random.nextInt((int)(Game.WIDTH - (2*Game.GRASS_BORDER_WIDTH))) + Game.GRASS_BORDER_WIDTH, random.nextInt((int)Game.MAP_HEIGHT));
             switch (Game.random.nextInt(4)) {
-                case 1:
+                case 0:
                     this.addEntity(new Duck(newPos));
                     break;
-                case 2:
+                case 1:
                     this.addEntity(new Goose(newPos));
                     break;
-                case 3:
+                case 2:
                     this.addEntity(new Log(newPos));
                     break;
-                case 4:
+                case 3:
                     this.addEntity(new Rock(newPos));
                     break;
             }

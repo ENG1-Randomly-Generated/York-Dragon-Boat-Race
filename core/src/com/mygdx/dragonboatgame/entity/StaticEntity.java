@@ -19,6 +19,8 @@ public abstract class StaticEntity extends Entity {
     public abstract void onCollide(Entity other);
 
     public void tick() {
+        if (!this.isActive()) return;
+
         Entity touching = this.getTouching();
         if (touching != null) {
             this.onCollide(touching);

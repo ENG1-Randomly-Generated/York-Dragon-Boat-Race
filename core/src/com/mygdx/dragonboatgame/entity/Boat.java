@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.mygdx.dragonboatgame.entity.obstacle.Obstacle;
 import com.mygdx.dragonboatgame.game.Game;
 import com.mygdx.dragonboatgame.util.Vector;
 
@@ -43,6 +44,8 @@ public class Boat extends DynamicEntity {
     }
 
     public void accelerate(boolean up, boolean right, boolean down, boolean left) {
+        if (this.robustness == 0) return; // Cannot accelerate if dead
+
         float dx = 0;
         float dy = 0;
 
@@ -69,6 +72,19 @@ public class Boat extends DynamicEntity {
         }
     }
 
+    /**
+     * Return the damage modifier in the case of a collision with this boat
+     *  e.g. take into account the velocity, acceleration, size, etc
+     *      TODO: Maybe robustness can make an affect?
+     *      TODO: Add other modifiers, rn we only care about velocity
+     *      TODO: Change with difficulty ???
+     *
+     * @return double modifier
+     */
+    public float getDamageModifier() {
+        return (this.getVelocity().getMagnitude() / 30) + 1;
+    }
+
     @Override
     public void move() {
         if (!playing) return;
@@ -88,10 +104,6 @@ public class Boat extends DynamicEntity {
         if (!playing) return;
         super.tick();
 
-        // Check boat is within bounds
-        if (this.getPos().x < Game.GRASS_BORDER_WIDTH || this.getPos().x > (Game.WIDTH - Game.GRASS_BORDER_WIDTH)) {
-            this.setVelocity(0, this.getVelocity().y);
-        }
     }
 
     /**

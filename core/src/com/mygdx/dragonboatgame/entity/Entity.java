@@ -64,6 +64,8 @@ public abstract class Entity {
     public Entity getTouching() {
         for (Entity e : Entity.entities) {
             if (e == this) continue;
+            if (!e.isActive()) continue;
+
             if (this.isTouching(e)) {
                 return e;
             }
@@ -81,6 +83,10 @@ public abstract class Entity {
     public void setSize(Vector size) { this.size = size; }
     public boolean isVisible() { return isVisible; }
     public void setVisible(boolean visible) { isVisible = visible; }
+    public boolean isActive() { return active; }
+    public void setActive(boolean active) { this.active = active; }
+    public Texture getTexture() { return texture; }
+    public void setTexture(Texture texture) { this.texture = texture; }
 
 
     public void draw(Camera camera) {

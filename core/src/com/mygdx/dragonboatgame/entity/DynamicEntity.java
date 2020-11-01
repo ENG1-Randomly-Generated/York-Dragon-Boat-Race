@@ -2,6 +2,7 @@ package com.mygdx.dragonboatgame.entity;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.mygdx.dragonboatgame.game.Game;
 import com.mygdx.dragonboatgame.util.Vector;
 
 /**
@@ -73,6 +74,14 @@ public abstract class DynamicEntity extends Entity {
         this.accelerate();
         if (this.velocity.isZero()) return; // No movement needed if velocity is 0
 
+        // Check bounds with water
+        if (this.getPos().x < Game.GRASS_BORDER_WIDTH) {
+            this.setVelocity(Math.max(this.getVelocity().x, 0), this.getVelocity().y);
+        }
+        if (this.getPos().x + this.getSize().x > Game.WIDTH - Game.GRASS_BORDER_WIDTH) {
+            this.setVelocity(Math.min(this.getVelocity().x, 0), this.getVelocity().y);
+        }
+
         float delta = Gdx.graphics.getDeltaTime();
         this.pos.x += this.velocity.x * delta;
         this.pos.y += this.velocity.y * delta;
@@ -84,6 +93,8 @@ public abstract class DynamicEntity extends Entity {
     public abstract void onCollide(Entity other);
 
     public void tick() {
+        if (!this.isActive()) return;
+
         this.move();
         Entity touching = this.getTouching();
         if (touching != null) {
