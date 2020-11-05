@@ -20,8 +20,8 @@ public class Duck extends Obstacle {
     }
 
     @Override
-    public void move() {
-        super.move();
+    public void move(float delta) {
+        super.move(delta);
     }
 
     @Override
@@ -37,13 +37,12 @@ public class Duck extends Obstacle {
     }
 
     @Override
-    public void tick() {
-        super.tick();
+    public void tick(float delta) {
+        super.tick(delta);
         if (randomMoveCooldown < System.currentTimeMillis()) {
             this.setVelocity(new Vector(Game.random.nextInt(50) - 25, Game.random.nextInt(50) - 25));
             randomMoveCooldown = System.currentTimeMillis() + 1000;
         }
     }
-
 
 }

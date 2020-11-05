@@ -32,7 +32,7 @@ abstract class Team {
         this.boat = boat;
     }
 
-    abstract public void tick();
+    abstract public void tick(float delta);
 
 
     public void addPenalty(float time) { this.penalty += time; }

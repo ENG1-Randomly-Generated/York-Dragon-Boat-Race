@@ -27,6 +27,8 @@ public class Boat extends DynamicEntity {
 
     protected float robustness;
     protected boolean playing;
+    protected float energy;
+    private int non_accelerating_ticks;
 
     private ShapeRenderer shapeRenderer;
 
@@ -38,31 +40,49 @@ public class Boat extends DynamicEntity {
         this.maneuverability = maneuverability;
         this.max_robustness = max_robustness;
         this.robustness = max_robustness;
+        this.energy = 100;
         this.playing = false;
         this.shapeRenderer = new ShapeRenderer();
         this.shapeRenderer.setAutoShapeType(true);
+        this.non_accelerating_ticks = 0;
     }
 
-    public void accelerate(boolean up, boolean right, boolean down, boolean left) {
+    /**
+     * Accelerate the boat in the given directions
+     *
+     * @param up Whether to accelerate up
+     * @param right Whether to accelerate right
+     * @param down Whether to accelerate down
+     * @param left Whether to accelerate left
+     */
+    public void accelerate(boolean up, boolean right, boolean down, boolean left, float delta) {
         if (this.robustness == 0) return; // Cannot accelerate if dead
+        if (this.energy <= 0) return; // Cannot accelerate with no energy
+
 
         float dx = 0;
         float dy = 0;
 
         if (up) {
-            dy += maneuverability / 10;
+            dy += maneuverability * delta;
         }
         if (right) {
-            dx += maneuverability / 10;
+            dx += maneuverability * delta;
         }
         if (down) {
-            dy -= maneuverability / 10;
+            dy -= maneuverability * delta;
         }
         if (left) {
-            dx -= maneuverability / 10;
+            dx -= maneuverability * delta;
         }
 
+        if (dx == 0 && dy == 0) return;
+
+        this.energy -= 5 * delta; // TODO: Make this variable (difficulty.. etc)
+        if (this.energy < 0) this.energy = 0;
+
         this.addAcceleration(dx, dy);
+        this.non_accelerating_ticks = 0;
     }
 
     public void damage(float damage) {
@@ -86,13 +106,13 @@ public class Boat extends DynamicEntity {
     }
 
     @Override
-    public void move() {
+    public void move(float delta) {
         if (!playing) return;
-        super.move();
 
-        if (this.velocity.getMagnitude() >= this.max_speed) {
-            this.setAcceleration(0, 0);
-        }
+        super.move(delta);
+
+        this.velocity.clamp(max_speed);
+        this.acceleration.clamp(maneuverability);
     }
 
     @Override
@@ -100,10 +120,16 @@ public class Boat extends DynamicEntity {
     }
 
     @Override
-    public void tick() {
+    public void tick(float delta) {
         if (!playing) return;
-        super.tick();
 
+        if (this.non_accelerating_ticks > (1/delta)) {
+            this.energy += 10 * delta; // TODO: Change based on difficulty etc
+            if (energy > 100) energy = 100;
+        }
+
+        this.non_accelerating_ticks++;
+        super.tick(delta);
     }
 
     /**
@@ -119,9 +145,15 @@ public class Boat extends DynamicEntity {
 
         // HP bar
         shapeRenderer.setColor(Color.WHITE);
-        shapeRenderer.rect(this.getPos().x, this.getPos().y + (float)(this.getSize().y * 1.1), this.getSize().x, 10);
+        shapeRenderer.rect(this.getPos().x, this.getPos().y + (float)(this.getSize().y * 1.25), this.getSize().x, 10);
         shapeRenderer.setColor(Color.RED);
-        shapeRenderer.rect(this.getPos().x, this.getPos().y + (float)(this.getSize().y * 1.1), this.getSize().x * (robustness/max_robustness), 10);
+        shapeRenderer.rect(this.getPos().x, this.getPos().y + (float)(this.getSize().y * 1.25), this.getSize().x * (robustness/max_robustness), 10);
+
+        // Energy bar
+        shapeRenderer.setColor(Color.WHITE);
+        shapeRenderer.rect(this.getPos().x, this.getPos().y + (float)(this.getSize().y * 1.1), this.getSize().x, 10);
+        shapeRenderer.setColor(Color.GOLD);
+        shapeRenderer.rect(this.getPos().x, this.getPos().y + (float)(this.getSize().y * 1.1), this.getSize().x * (energy/100), 10);
 
         shapeRenderer.end();
     }

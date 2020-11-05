@@ -21,20 +21,21 @@ public class Player extends Team {
     }
 
 
-    private void checkInput() {
+    private void checkInput(float delta) {
         boolean up = Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.UP);
         boolean right = Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT);
         boolean down = Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.DOWN);
         boolean left = Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT);
 
-        this.boat.accelerate(up, right, down, left);
+        this.boat.accelerate(up, right, down, left, delta);
     }
 
 
     @Override
-    public void tick() {
-        this.boat.tick();
-        this.checkInput();
+    public void tick(float delta) {
+        this.boat.tick(delta);
+        this.checkInput(delta);
+        System.out.println(this.boat.getAcceleration());
     }
 
 }

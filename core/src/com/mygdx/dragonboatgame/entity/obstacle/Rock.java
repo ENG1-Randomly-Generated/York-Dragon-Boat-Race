@@ -28,12 +28,12 @@ public class Rock extends Obstacle {
     }
 
     @Override
-    public void tick() {
-        super.tick();
+    public void tick(float delta) {
+        super.tick(delta);
     }
 
     @Override
-    public void move() {
-        super.move();
+    public void move(float delta) {
+        super.move(delta);
     }
 }

@@ -27,7 +27,7 @@ public abstract class Obstacle extends DynamicEntity {
     }
 
     @Override
-    public void tick() {
-        super.tick();
+    public void tick(float delta) {
+        super.tick(delta);
     }
 }

@@ -46,8 +46,11 @@ public abstract class DynamicEntity extends Entity {
     }
 
     public void addAcceleration(float x, float y) {
-        this.acceleration.x += x;
-        this.acceleration.y += y;
+        this.acceleration.add(x, y);
+    }
+
+    public void addAcceleration(Vector acceleration) {
+        this.acceleration.add(acceleration);
     }
 
     public Vector getAcceleration() {
@@ -58,20 +61,21 @@ public abstract class DynamicEntity extends Entity {
     /**
      * Accelerate the current entity by our acceleration
      */
-    private void accelerate() {
-        this.velocity.add(this.acceleration);
-        this.addAcceleration(-this.getAcceleration().x / 100, -this.getAcceleration().y / 100);
+    private void accelerate(float delta) {
+        this.velocity.add(this.acceleration.multiply(delta));
+        this.addAcceleration(this.acceleration.multiply(-1f * delta));
     }
 
-    private void decelelerate() {
-        this.addVelocity(-this.getVelocity().x / 100, -this.getVelocity().y / 100);
+    private void decelerate(float delta) {
+        this.addVelocity(this.velocity.multiply(-1f * delta));
     }
 
     /**
      * Moves the entity based on it's current velocity
      */
-    public void move() {
-        this.accelerate();
+    public void move(float delta) {
+
+        this.accelerate(delta);
         if (this.velocity.isZero()) return; // No movement needed if velocity is 0
 
         // Check bounds with water
@@ -82,20 +86,21 @@ public abstract class DynamicEntity extends Entity {
             this.setVelocity(Math.min(this.getVelocity().x, 0), this.getVelocity().y);
         }
 
-        float delta = Gdx.graphics.getDeltaTime();
+
         this.pos.x += this.velocity.x * delta;
         this.pos.y += this.velocity.y * delta;
 
-        this.decelelerate();
+        this.decelerate(delta);
     }
 
 
     public abstract void onCollide(Entity other);
 
-    public void tick() {
+
+    public void tick(float delta) {
         if (!this.isActive()) return;
 
-        this.move();
+        this.move(delta);
         Entity touching = this.getTouching();
         if (touching != null) {
             this.onCollide(touching);
