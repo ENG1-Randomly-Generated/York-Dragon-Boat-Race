@@ -37,9 +37,9 @@ public class Game {
      */
     static {
         // {max_speed, manovourability, max_robustness)
-        BOATS.put("Speedy", new int[] {22, 14, 2});
-        BOATS.put("Twisty", new int[] {20, 19, 4});
-        BOATS.put("Tanky", new int[] {18, 15, 10});
+        BOATS.put("Speedy", new int[] {42, 30, 2});
+        BOATS.put("Twisty", new int[] {40, 32, 4});
+        BOATS.put("Tanky", new int[] {38, 27, 10});
     }
 
     public static Random random = new Random();
@@ -91,12 +91,14 @@ public class Game {
      *  Calls all of it's known entities' ticks, as well as checks for win conditions
      */
     public void tick() {
-        player.tick();
+        float delta = Gdx.graphics.getDeltaTime();
+
+        player.tick(delta);
         for (NPC npc : npcs) {
-            npc.tick();
+            npc.tick(delta);
         }
         for (Entity entity: entities) {
-            entity.tick();
+            entity.tick(delta);
         }
 
         // Update camera

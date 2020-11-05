@@ -31,7 +31,15 @@ public class Vector {
     }
 
     public boolean isZero() {
-        return this.x == 0 && this.y == 0;
+        return this.x <= 0.001 && this.y <= 0.001;
+    }
+
+    public void clamp(float max) {
+        float over = this.getMagnitude() / max;
+        if (over > 1) {
+            this.x = (this.x / over);
+            this.y = (this.y / over);
+        }
     }
 
     public boolean equals(Object other) {
@@ -41,6 +49,10 @@ public class Vector {
         }
 
         return false;
+    }
+
+    public Vector multiply(float scale) {
+        return new Vector(this.x * scale, this.y * scale);
     }
 
     public String toString() {

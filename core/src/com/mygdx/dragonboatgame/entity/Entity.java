@@ -107,7 +107,7 @@ public abstract class Entity {
     }
 
 
-    public abstract void tick();
+    public abstract void tick(float delta);
 
 
 
