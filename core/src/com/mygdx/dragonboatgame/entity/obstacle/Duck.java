@@ -10,13 +10,16 @@ import com.mygdx.dragonboatgame.util.Vector;
 
 public class Duck extends Obstacle {
 
+    private static Texture TEXTURE = new Texture(Gdx.files.internal("entity/duck.png"));
+    private static Texture BROKEN_TEXTURE = new Texture(Gdx.files.internal("entity/dead_duck.png"));
     private long randomMoveCooldown;
-    private Texture dead;
 
     public Duck(Vector pos) {
-        super(new Texture(Gdx.files.internal("entity/duck.png")), pos, new Vector(20,20));
+        super(TEXTURE, pos, new Vector(20,20));
+        this.setBreakable(true);
+        this.setBrokenTexture(BROKEN_TEXTURE);
+        this.setHardness(0.4f);
         this.randomMoveCooldown = 0;
-        this.dead = new Texture(Gdx.files.internal("entity/dead_duck.png"));
     }
 
     @Override
@@ -25,23 +28,11 @@ public class Duck extends Obstacle {
     }
 
     @Override
-    public void onCollide(Entity other) {
-        super.onCollide(other);
-        if (other instanceof Boat) {
-            Boat boat = (Boat) other;
-            boat.damage(0.05f * boat.getDamageModifier());
-            boat.setVelocity(boat.getVelocity().x / 5, boat.getVelocity().y / 5);
-            this.setActive(false);
-            this.setTexture(dead);
-        }
-    }
-
-    @Override
     public void tick(float delta) {
         super.tick(delta);
         if (randomMoveCooldown < System.currentTimeMillis()) {
-            this.setVelocity(new Vector(Game.random.nextInt(50) - 25, Game.random.nextInt(50) - 25));
-            randomMoveCooldown = System.currentTimeMillis() + 1000;
+            this.setAcceleration(Game.random.nextInt(100) - 50, Game.random.nextInt(100) - 50);
+            randomMoveCooldown = System.currentTimeMillis() + 500;
         }
     }
 

@@ -15,15 +15,36 @@ import com.mygdx.dragonboatgame.util.Vector;
  */
 public abstract class Obstacle extends DynamicEntity {
 
-    private boolean broken;
+    private boolean breakable;
+    private Texture brokenTexture;
+    private float hardness;
 
     public Obstacle(Texture texture, Vector pos, Vector size) {
         super(texture, pos, size);
+        this.breakable = false;
+        this.brokenTexture = null;
+        this.hardness = 0;
     }
 
+    public boolean isBreakable() { return breakable; }
+    public void setBreakable(boolean breakable) { this.breakable = breakable; }
+    public Texture getBrokenTexture() { return brokenTexture; }
+    public void setBrokenTexture(Texture brokenTexture) { this.brokenTexture = brokenTexture; }
+    public float getHardness() { return hardness; }
+    public void setHardness(float hardness) { this.hardness = hardness; }
 
     @Override
     public void onCollide(Entity other) {
+        if (other instanceof Boat) {
+            Boat boat = (Boat) other;
+            boat.damage(this.hardness * boat.getDamageModifier());
+            boat.setVelocity(boat.getVelocity().x * this.hardness, boat.getVelocity().y * this.hardness);
+
+            if (this.breakable && this.brokenTexture != null) {
+                this.setActive(false);
+                this.setTexture(this.brokenTexture);
+            }
+        }
     }
 
     @Override

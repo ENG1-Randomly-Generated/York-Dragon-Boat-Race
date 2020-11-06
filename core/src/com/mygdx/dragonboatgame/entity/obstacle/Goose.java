@@ -8,28 +8,19 @@ import com.mygdx.dragonboatgame.util.Vector;
 
 public class Goose extends Obstacle {
 
-    private Texture dead;
+    private static Texture TEXTURE = new Texture(Gdx.files.internal("entity/goose.png"));
+    private static Texture BROKEN_TEXTURE = new Texture(Gdx.files.internal("entity/dead_goose.png"));
 
     public Goose(Vector pos) {
-        super(new Texture(Gdx.files.internal("entity/goose.png")), pos, new Vector(20,20));
-        this.dead = new Texture(Gdx.files.internal("entity/dead_goose.png"));
+        super(TEXTURE, pos, new Vector(20,20));
+        this.setBreakable(true);
+        this.setHardness(0.5f);
+        this.setBrokenTexture(BROKEN_TEXTURE);
     }
 
     @Override
     public void move(float delta) {
         super.move(delta);
-    }
-
-    @Override
-    public void onCollide(Entity other) {
-        super.onCollide(other);
-        if (other instanceof Boat) {
-            Boat boat = (Boat) other;
-            boat.damage(0.1f * boat.getDamageModifier());
-            boat.setVelocity(boat.getVelocity().x / 5, boat.getVelocity().y / 5);
-            this.setActive(false);
-            this.setTexture(dead);
-        }
     }
 
     @Override
