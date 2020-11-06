@@ -67,7 +67,7 @@ public abstract class DynamicEntity extends Entity {
     }
 
     private void decelerate(float delta) {
-        this.addVelocity(this.velocity.multiply(-1f * delta));
+        this.addVelocity(this.velocity.multiply(-0.3f * delta));
     }
 
     /**

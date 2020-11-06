@@ -1,8 +1,11 @@
 package com.mygdx.dragonboatgame.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.mygdx.dragonboatgame.DragonBoatGame;
 import com.mygdx.dragonboatgame.entity.Boat;
@@ -13,8 +16,10 @@ import com.mygdx.dragonboatgame.entity.obstacle.Log;
 import com.mygdx.dragonboatgame.entity.obstacle.Rock;
 import com.mygdx.dragonboatgame.util.Vector;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -26,7 +31,7 @@ public class Game {
 
     public static final float WIDTH = Gdx.graphics.getWidth();
     public static final float HEIGHT = Gdx.graphics.getHeight();
-    public static final float MAP_HEIGHT = 6000;
+    public static final float MAP_HEIGHT = 3000;
     public static final float GRASS_BORDER_WIDTH = WIDTH/8;
 
     private static HashMap<String, int[]> BOATS = new HashMap<String, int[]>();
@@ -37,9 +42,9 @@ public class Game {
      */
     static {
         // {max_speed, manovourability, max_robustness)
-        BOATS.put("Speedy", new int[] {42, 30, 2});
-        BOATS.put("Twisty", new int[] {40, 32, 4});
-        BOATS.put("Tanky", new int[] {38, 27, 10});
+        BOATS.put("Speedy", new int[] {42, 30, 10});
+        BOATS.put("Twisty", new int[] {40, 32, 10});
+        BOATS.put("Tanky", new int[] {38, 27, 15});
     }
 
     public static Random random = new Random();
@@ -50,7 +55,10 @@ public class Game {
     private Player player;
     private ArrayList<NPC> npcs;
     private ArrayList<Entity> entities;
+    private HashMap<Team, Float[]> laneDividers;
     private ShapeRenderer shapeRenderer;
+    private SpriteBatch batch;
+    private BitmapFont font;
 
     private OrthographicCamera camera;
 
@@ -62,10 +70,13 @@ public class Game {
         this.leg = 0;
         this.time = 0;
         this.npcs = new ArrayList<NPC>(3);
+        this.laneDividers = new HashMap<Team, Float[]>();
         this.entities = new ArrayList<Entity>();
         this.player = player;
         this.shapeRenderer = new ShapeRenderer();
         this.shapeRenderer.setAutoShapeType(true);
+        this.batch = new SpriteBatch();
+        this.font = new BitmapFont();
 
         this.camera = new OrthographicCamera(Game.WIDTH, Game.HEIGHT);
         camera.setToOrtho(false);
@@ -77,12 +88,15 @@ public class Game {
     public void startLeg() {
         float seperation = ((Game.WIDTH - (2 * GRASS_BORDER_WIDTH)) / (npcs.size() + 1));
         player.boat.setPos(new Vector(GRASS_BORDER_WIDTH, 0));
+        laneDividers.put(player, new Float[] {GRASS_BORDER_WIDTH, GRASS_BORDER_WIDTH + seperation});
         player.boat.setPlaying(true);
         for (int i = 0; i < npcs.size(); i++) {
             NPC npc = npcs.get(i);
+            laneDividers.put(npc, new Float[] {GRASS_BORDER_WIDTH + (seperation * (i)), GRASS_BORDER_WIDTH + (seperation * (i+1))});
             npc.boat.setPos(new Vector(Game.GRASS_BORDER_WIDTH + (seperation * (i+1)), 0));
             npc.boat.setPlaying(true);
         }
+        this.time = 0;
     }
 
 
@@ -92,6 +106,7 @@ public class Game {
      */
     public void tick() {
         float delta = Gdx.graphics.getDeltaTime();
+        time += delta;
 
         player.tick(delta);
         for (NPC npc : npcs) {
@@ -101,20 +116,50 @@ public class Game {
             entity.tick(delta);
         }
 
+        // Check lane divisions & add penalties where necessary
+        for (Map.Entry<Team, Float[]> entry : laneDividers.entrySet()) {
+            Team team = entry.getKey();
+            Boat boat = team.boat;
+            Float[] aPos = entry.getValue();
+            if (boat.getPos().x < aPos[0] || boat.getPos().x + boat.getSize().x > aPos[1]) {
+                team.addPenalty(delta * 2); // TODO: Make this scalable properly with difficulty or something
+            }
+        }
+
         // Update camera
         camera.position.set(camera.position.x, Math.min(Math.max(player.boat.getPos().y, Game.HEIGHT/2), Game.MAP_HEIGHT - Game.HEIGHT/2), 0);
         camera.update();
+
+        // Debug
+        // TODO: Remove this
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F1)) {
+            Entity.DEBUG_HITBOXES = !Entity.DEBUG_HITBOXES;
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F2)) {
+            Class cls = Boat.class;
+            try {
+                Field energy = cls.getDeclaredField("energy");
+                energy.setAccessible(true);
+                energy.set(player.boat, 100);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
     }
 
     /**
      *  The main draw function for the game
-     *      TODO: Here we shall draw the track
+     *
      *  Calls all of it's known entities' draw functions
      */
     public void draw() {
 
         shapeRenderer.setProjectionMatrix(camera.combined);
         shapeRenderer.begin();
+
+        // Draw basic scene
+
         shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.GREEN);
         shapeRenderer.rect(0, 0, GRASS_BORDER_WIDTH, Game.MAP_HEIGHT);
@@ -122,7 +167,30 @@ public class Game {
         shapeRenderer.rect(GRASS_BORDER_WIDTH, 0, WIDTH -  (2 * GRASS_BORDER_WIDTH), Game.MAP_HEIGHT);
         shapeRenderer.setColor(Color.GREEN);
         shapeRenderer.rect(Game.WIDTH - GRASS_BORDER_WIDTH, 0, GRASS_BORDER_WIDTH, Game.MAP_HEIGHT);
+
+        // Draw lane dividers
+
+        for (Float[] aPos: laneDividers.values()) {
+            boolean red = false;
+            for (int y = 0; y < Game.MAP_HEIGHT; y+=50) {
+                if (red) {
+                    shapeRenderer.setColor(Color.RED);
+                } else {
+                    shapeRenderer.setColor(Color.WHITE);
+                }
+                shapeRenderer.rect(aPos[1] - 5, y, 10, 50);
+                red = !red;
+            }
+        }
+
         shapeRenderer.end();
+
+
+        batch.begin();
+        this.font.draw(batch, "Leg: " + this.leg, 10, Game.HEIGHT - 5);
+        this.font.draw(batch, "Time: " + Math.floor(this.time) + "s", 10, Game.HEIGHT - 20);
+        this.font.draw(batch, "Penalty: " + Math.floor(this.player.getPenalty()) + "s", 10, Game.HEIGHT - 35);
+        batch.end();
 
 
 
