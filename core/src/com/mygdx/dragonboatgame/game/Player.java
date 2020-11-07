@@ -33,9 +33,8 @@ public class Player extends Team {
 
     @Override
     public void tick(float delta) {
-        this.boat.tick(delta);
+        super.tick(delta);
         this.checkInput(delta);
-        System.out.println(this.boat.getAcceleration());
     }
 
 }

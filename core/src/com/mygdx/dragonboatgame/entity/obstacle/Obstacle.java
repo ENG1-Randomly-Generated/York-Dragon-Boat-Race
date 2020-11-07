@@ -51,4 +51,12 @@ public abstract class Obstacle extends DynamicEntity {
     public void tick(float delta) {
         super.tick(delta);
     }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        if (this.brokenTexture != null) {
+            this.brokenTexture.dispose();
+        }
+    }
 }

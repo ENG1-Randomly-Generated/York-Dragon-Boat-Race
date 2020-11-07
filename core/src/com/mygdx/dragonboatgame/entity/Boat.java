@@ -26,7 +26,6 @@ public class Boat extends DynamicEntity {
     protected float max_robustness;
 
     protected float robustness;
-    protected boolean playing;
     protected float energy;
     private int non_accelerating_ticks;
 
@@ -41,9 +40,19 @@ public class Boat extends DynamicEntity {
         this.max_robustness = max_robustness;
         this.robustness = max_robustness;
         this.energy = 100;
-        this.playing = false;
         this.shapeRenderer = new ShapeRenderer();
         this.shapeRenderer.setAutoShapeType(true);
+        this.non_accelerating_ticks = 0;
+    }
+
+
+    /**
+     * Reset the current boat for reuse
+     *  Resets energy & HP
+     */
+    public void reset() {
+        this.energy = 100;
+        this.robustness = max_robustness;
         this.non_accelerating_ticks = 0;
     }
 
@@ -107,7 +116,6 @@ public class Boat extends DynamicEntity {
 
     @Override
     public void move(float delta) {
-        if (!playing) return;
 
         super.move(delta);
 
@@ -121,7 +129,6 @@ public class Boat extends DynamicEntity {
 
     @Override
     public void tick(float delta) {
-        if (!playing) return;
 
         if (this.non_accelerating_ticks > (1/delta)) {
             this.energy += 10 * delta; // TODO: Change based on difficulty etc
@@ -137,7 +144,6 @@ public class Boat extends DynamicEntity {
      */
     @Override
     public void draw(Camera camera) {
-        if (!playing) return;
         super.draw(camera);
 
         shapeRenderer.setProjectionMatrix(camera.combined);
@@ -167,6 +173,5 @@ public class Boat extends DynamicEntity {
         return new Boat(this.name, this.max_speed, this.maneuverability, this.max_robustness);
     }
 
-    public boolean isPlaying() { return playing; }
-    public void setPlaying(boolean playing) { this.playing = playing; }
+    public boolean isAlive() { return robustness > 0; }
 }

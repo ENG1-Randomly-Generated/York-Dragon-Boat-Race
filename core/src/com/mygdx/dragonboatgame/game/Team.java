@@ -32,7 +32,11 @@ abstract class Team {
         this.boat = boat;
     }
 
-    abstract public void tick(float delta);
+    public void tick(float delta) {
+        if (this.boat != null) {
+            this.boat.tick(delta);
+        }
+    }
 
 
     public void addPenalty(float time) { this.penalty += time; }
@@ -49,7 +53,6 @@ abstract class Team {
      */
     public float getBestTime() {
         if (this.last_times.size() < 3) return 0;
-
         return Math.min(this.last_times.get(1), this.last_times.get(2));
     }
 

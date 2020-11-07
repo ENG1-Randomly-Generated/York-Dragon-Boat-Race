@@ -110,5 +110,13 @@ public abstract class Entity {
     public abstract void tick(float delta);
 
 
+    /**
+     * Dispose of the current entity
+     */
+    public void dispose() {
+        this.texture.dispose();
+        this.batch.dispose();
+        this.shapeRenderer.dispose();
+    }
 
 }
