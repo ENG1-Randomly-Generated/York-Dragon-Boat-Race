@@ -19,8 +19,7 @@ public class DragonBoatGame extends ApplicationAdapter {
 		player = new Player("Player", Color.BLUE, Game.getBoat("Speedy"));
 		game = new Game(player);
 		game.addRandomNPCs(3, 5);
-		game.generateObstacles(100);
-		game.startLeg();
+		game.startLeg(1);
 	}
 
 	@Override

@@ -17,7 +17,7 @@ import java.util.ArrayList;
  */
 public abstract class Entity {
 
-    private static final boolean DEBUG_HITBOXES = false;
+    public static boolean DEBUG_HITBOXES = false;
 
     public static ArrayList<Entity> entities = new ArrayList<Entity>();
 
@@ -110,5 +110,13 @@ public abstract class Entity {
     public abstract void tick(float delta);
 
 
+    /**
+     * Dispose of the current entity
+     */
+    public void dispose() {
+        this.texture.dispose();
+        this.batch.dispose();
+        this.shapeRenderer.dispose();
+    }
 
 }

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.dragonboatgame.entity.Boat;
 import com.mygdx.dragonboatgame.entity.Entity;
+import com.mygdx.dragonboatgame.game.Game;
 import com.mygdx.dragonboatgame.util.Vector;
 
 public class Log extends Obstacle {
