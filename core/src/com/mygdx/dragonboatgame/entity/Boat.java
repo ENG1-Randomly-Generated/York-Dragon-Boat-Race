@@ -6,6 +6,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.mygdx.dragonboatgame.entity.obstacle.Obstacle;
 import com.mygdx.dragonboatgame.game.Game;
@@ -20,6 +22,7 @@ import com.mygdx.dragonboatgame.util.Vector;
 public class Boat extends DynamicEntity {
 
     protected String name;
+    protected String team_name;
 
     public static Texture texture = new Texture(Gdx.files.internal("entity/boat.png"));
     public static Vector size = new Vector(50,100);
@@ -34,6 +37,8 @@ public class Boat extends DynamicEntity {
     private int non_accelerating_ticks;
 
     private ShapeRenderer shapeRenderer;
+    private BitmapFont font;
+    private SpriteBatch batch;
 
     public Boat(String name, float max_speed, float maneuverability, float max_robustness) {
         super(texture, new Vector(0, 0), size);
@@ -47,6 +52,9 @@ public class Boat extends DynamicEntity {
         this.shapeRenderer = new ShapeRenderer();
         this.shapeRenderer.setAutoShapeType(true);
         this.non_accelerating_ticks = 0;
+        this.font = new BitmapFont();
+        this.batch = new SpriteBatch();
+        this.team_name = "";
     }
 
 
@@ -166,6 +174,15 @@ public class Boat extends DynamicEntity {
         shapeRenderer.rect(this.getPos().x, this.getPos().y + (float)(this.getSize().y * 1.1), this.getSize().x * (energy/100), 10);
 
         shapeRenderer.end();
+
+        // Name of boat
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
+
+        font.draw(batch, this.team_name, this.getPos().x, this.getPos().y + (float)(this.getSize().y * 1.65));
+        font.draw(batch, this.name, this.getPos().x, this.getPos().y + (float)(this.getSize().y * 1.5));
+
+        batch.end();
     }
 
     /**
@@ -178,4 +195,6 @@ public class Boat extends DynamicEntity {
     }
 
     public boolean isAlive() { return robustness > 0; }
+
+    public void setTeam_name(String team_name) { this.team_name = team_name; }
 }

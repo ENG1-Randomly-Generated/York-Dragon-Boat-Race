@@ -30,6 +30,7 @@ abstract class Team {
     public Team(String name, Color color, Boat boat) {
         this(name, color);
         this.boat = boat;
+        this.boat.setTeam_name(name);
     }
 
     public void tick(float delta) {
@@ -61,7 +62,10 @@ abstract class Team {
     public float getPenalty() { return this.penalty; }
     public void setName(String name) { this.name = name; }
     public void setColor(Color color) { this.color = color; }
-    public void setBoat(Boat boat) { this.boat = boat; }
+    public void setBoat(Boat boat) {
+        this.boat = boat;
+        this.boat.setTeam_name(name);
+    }
     public void setPlaying(boolean bool) { this.playing = bool; }
     public boolean isPlaying() { return this.playing; }
 }

@@ -2,7 +2,6 @@ package com.mygdx.dragonboatgame.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.mygdx.dragonboatgame.DragonBoatGame;
 import com.mygdx.dragonboatgame.screens.GameManager;
 
 public class DesktopLauncher {

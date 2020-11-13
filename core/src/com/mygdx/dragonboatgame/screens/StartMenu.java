@@ -6,22 +6,17 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.Input;
+import com.mygdx.dragonboatgame.game.Game;
 
 
 public class StartMenu extends AbstractScreen{
 
-    private ShapeRenderer shapeRenderer;
-    private OrthographicCamera camera;
     private SpriteBatch batch;
     private BitmapFont font;
 
 
     public StartMenu(final GameManager gameManager){
         super(gameManager); //TODO code here
-        camera = new OrthographicCamera(GameManager.WIDTH, GameManager.HEIGHT);
-        camera.setToOrtho(false);
-        shapeRenderer = new ShapeRenderer();
-        shapeRenderer.setAutoShapeType(true);
         batch = new SpriteBatch();
         font = new BitmapFont(Gdx.files.internal("fonts/largefont.fnt"));
     }
@@ -29,7 +24,7 @@ public class StartMenu extends AbstractScreen{
 
     @Override
     public void tick(float delta) {
-        if (getEnter()){
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
             gameManager.sm.setScreen(ScreenManager.GAMESTATE.BoatSelection);
         }
     }
@@ -38,12 +33,8 @@ public class StartMenu extends AbstractScreen{
     public void render(float delta) {
         super.render(delta);
         batch.begin();
-        font.draw(batch, "PRESS ENTER TO PLAY", GameManager.WIDTH/3.5f, GameManager.HEIGHT/2);  //TODO make sure this looks good on all screens and aspect ratios
+        font.draw(batch, "PRESS ENTER TO PLAY", Game.WIDTH/3.5f, Game.HEIGHT/2);  //TODO make sure this looks good on all screens and aspect ratios
         batch.end();
-    }
-
-    private boolean getEnter() {
-        return Gdx.input.isKeyPressed(Input.Keys.ENTER);
     }
 
     @Override
