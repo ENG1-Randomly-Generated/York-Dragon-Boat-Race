@@ -28,12 +28,12 @@ public class Boat extends DynamicEntity {
     public static Vector size = new Vector(50,100);
 
 
-    protected float max_speed;
-    protected float maneuverability;
-    protected float max_robustness;
+    public final float max_speed;
+    public final float maneuverability;
+    public final float max_robustness;
 
-    protected float robustness;
-    protected float energy;
+    public float robustness;
+    public float energy;
     private int non_accelerating_ticks;
 
     private ShapeRenderer shapeRenderer;

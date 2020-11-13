@@ -69,22 +69,23 @@ public class Game extends AbstractScreen {
     public void startLeg(int leg) {
         // Start new leg
         this.leg = leg;
-        generateObstacles(30); // TODO: Change by difficulty
+        generateObstacles(15); // TODO: Change by difficulty
 
         float seperation = ((Game.WIDTH - (2 * GRASS_BORDER_WIDTH)) / (npcs.size() + 1));
 
         player.boat.reset();
-        player.boat.setPos(new Vector(GRASS_BORDER_WIDTH, 0));
+        player.boat.setPos(new Vector(GRASS_BORDER_WIDTH + seperation/2, 0));
         laneDividers.put(player, new Float[] {GRASS_BORDER_WIDTH, GRASS_BORDER_WIDTH + seperation});
         player.setPlaying(true);
         player.setPenalty(0);
         for (int i = 0; i < npcs.size(); i++) {
             NPC npc = npcs.get(i);
-            laneDividers.put(npc, new Float[] {GRASS_BORDER_WIDTH + (seperation * (i)), GRASS_BORDER_WIDTH + (seperation * (i+1))});
+            laneDividers.put(npc, new Float[] {GRASS_BORDER_WIDTH + (seperation * (i+1)), GRASS_BORDER_WIDTH + (seperation * (i+2))});
             npc.boat.reset();
             npc.setPenalty(0);
-            npc.boat.setPos(new Vector(Game.GRASS_BORDER_WIDTH + (seperation * (i+1)), 0));
+            npc.boat.setPos(new Vector(Game.GRASS_BORDER_WIDTH + (seperation * (i+1)) + seperation/2, 0));
             npc.setPlaying(true);
+            npc.init();
         }
         time = 0;
     }
@@ -215,6 +216,7 @@ public class Game extends AbstractScreen {
         // Draw lane dividers
 
         for (Float[] aPos: laneDividers.values()) {
+            if (aPos[1] >= Game.WIDTH - Game.GRASS_BORDER_WIDTH) continue;
             boolean red = false;
             for (int y = 0; y < Game.MAP_HEIGHT; y+=50) {
                 if (red) {
@@ -252,9 +254,11 @@ public class Game extends AbstractScreen {
 
 
     public static void addEntity(Entity entity) { entities.add(entity); }
+    public static ArrayList<Entity> getEntities() { return entities; }
     public static void addNPC(NPC npc) {
         npcs.add(npc);
     }
+    public static Float[] getLaneDividers(Team team) { return laneDividers.get(team); }
 
 
     /**
