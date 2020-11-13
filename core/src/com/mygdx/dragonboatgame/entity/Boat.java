@@ -21,6 +21,10 @@ public class Boat extends DynamicEntity {
 
     protected String name;
 
+    public static Texture texture = new Texture(Gdx.files.internal("entity/boat.png"));
+    public static Vector size = new Vector(50,100);
+
+
     protected float max_speed;
     protected float maneuverability;
     protected float max_robustness;
@@ -32,7 +36,7 @@ public class Boat extends DynamicEntity {
     private ShapeRenderer shapeRenderer;
 
     public Boat(String name, float max_speed, float maneuverability, float max_robustness) {
-        super(new Texture(Gdx.files.internal("entity/boat.png")), new Vector(0, 0), new Vector(50,100));
+        super(texture, new Vector(0, 0), size);
 
         this.name = name;
         this.max_speed = max_speed;

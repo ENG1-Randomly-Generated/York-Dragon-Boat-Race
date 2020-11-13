@@ -22,7 +22,7 @@ public abstract class Entity {
     public static ArrayList<Entity> entities = new ArrayList<Entity>();
 
     protected Vector pos;
-    protected Vector size;
+    private Vector size;
     protected SpriteBatch batch;
     protected ShapeRenderer shapeRenderer;
     protected Texture texture;
