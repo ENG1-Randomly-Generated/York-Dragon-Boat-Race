@@ -18,7 +18,8 @@ public class ScreenManager {
         DragonBoatGame,
         LegResult,
         Finalists,
-        Podium
+        Podium,
+        Medals
     }
 
     public ScreenManager(final GameManager gameManager) {
@@ -30,7 +31,11 @@ public class ScreenManager {
         this.screens = new HashMap<GAMESTATE, AbstractScreen>();
         this.screens.put(GAMESTATE.StartMenu, new StartMenu(gameManager));
         this.screens.put(GAMESTATE.BoatSelection, new BoatSelectionScreen(gameManager));
+        this.screens.put(GAMESTATE.TeamNameInput, new TeamNameInputScreen(gameManager));
         this.screens.put(GAMESTATE.DragonBoatGame, new Game(gameManager));
+        this.screens.put(GAMESTATE.LegResult, new LegResultScreen(gameManager));
+        this.screens.put(GAMESTATE.Finalists, new FinalistsScreen(gameManager));
+        this.screens.put(GAMESTATE.Medals, new MedalScreen(gameManager));
         //add all other screens to this
     }
 
