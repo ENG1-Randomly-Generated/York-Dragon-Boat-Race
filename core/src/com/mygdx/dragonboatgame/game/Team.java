@@ -18,6 +18,7 @@ public abstract class Team {
     public Boat boat;
     private boolean playing;
     private float penalty;
+    private boolean qualified;
 
     public Team(String name, Color color) {
         this.name = name;
@@ -25,6 +26,7 @@ public abstract class Team {
         this.last_times = new ArrayList<>(3);
         this.playing = false;
         this.penalty = 0;
+        this.qualified = false;
     }
 
     public Team(String name, Color color, Boat boat) {
@@ -77,4 +79,6 @@ public abstract class Team {
     }
     public void setPlaying(boolean bool) { this.playing = bool; }
     public boolean isPlaying() { return this.playing; }
+    public boolean hasQualified() { return qualified; }
+    public void setQualified(boolean qualified) { this.qualified = qualified; }
 }

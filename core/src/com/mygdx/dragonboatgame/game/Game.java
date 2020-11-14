@@ -75,7 +75,12 @@ public class Game extends AbstractScreen {
         Game.leg = leg;
         generateObstacles(15); // TODO: Change by difficulty
 
-        float seperation = ((Game.WIDTH - (2 * GRASS_BORDER_WIDTH)) / (npcs.size() + 1));
+        float seperation;
+        if (Game.leg < 4) {
+            seperation = ((Game.WIDTH - (2 * GRASS_BORDER_WIDTH)) / (npcs.size() + 1));
+        } else {
+            seperation = ((Game.WIDTH - (2 * GRASS_BORDER_WIDTH)) / (Math.min(3, Game.getAllTeams().length)));
+        }
 
         player.boat.reset();
         player.boat.setPos(new Vector(GRASS_BORDER_WIDTH + seperation/2, 0));
@@ -84,6 +89,8 @@ public class Game extends AbstractScreen {
         player.setPenalty(0);
         for (int i = 0; i < npcs.size(); i++) {
             NPC npc = npcs.get(i);
+            if (Game.leg >= 4 && !npc.hasQualified()) continue; // Do not include this guy
+
             laneDividers.put(npc, new Float[] {GRASS_BORDER_WIDTH + (seperation * (i+1)), GRASS_BORDER_WIDTH + (seperation * (i+2))});
             npc.boat.reset();
             npc.setPenalty(0);
@@ -102,12 +109,34 @@ public class Game extends AbstractScreen {
     private static void finishLeg() {
         // Clean entities
         entities.clear();
+        laneDividers.clear();
 
         if (leg <= 2) {
             Game.gameManager.sm.setScreen(ScreenManager.GAMESTATE.LegResult);
-        } else {
-            // Wow game is over!
-            Game.gameManager.sm.setScreen(ScreenManager.GAMESTATE.Podium);
+        } else if (leg == 3) {
+            // Calculate which teams qualified and show FinalistsScreen
+            int teamsToQualify = Math.min(3, Game.getAllTeams().length);
+            int qualified = 0;
+
+            while (qualified < teamsToQualify) {
+                float minTime = Float.MAX_VALUE;
+                Team minTeam = null;
+                for (Team team : Game.getAllTeams()) {
+                    if (team.hasQualified()) continue;
+                    if (team.getBestTime() < minTime) {
+                        minTime = team.getBestTime();
+                        minTeam = team;
+                    }
+                }
+                if (minTeam != null) {
+                    minTeam.setQualified(true);
+                    qualified++;
+                }
+            }
+
+            Game.gameManager.sm.setScreen(ScreenManager.GAMESTATE.Finalists);
+        } else if (leg == 4) {
+            Game.gameManager.sm.setScreen(ScreenManager.GAMESTATE.Medals);
         }
     }
 
@@ -243,7 +272,7 @@ public class Game extends AbstractScreen {
 
 
         batch.begin();
-        font.draw(batch, "Leg: " + leg, 10, Game.HEIGHT - 5);
+        font.draw(batch, "Leg: " + ((leg < 4) ? leg : "Finals"), 10, Game.HEIGHT - 5);
         font.draw(batch, "Time: " + Math.floor(time) + "s", 10, Game.HEIGHT - 20);
         font.draw(batch, "Penalty: " + Math.floor(player.getPenalty()) + "s", 10, Game.HEIGHT - 35);
         batch.end();
@@ -371,7 +400,6 @@ public class Game extends AbstractScreen {
 
     @Override
     public void render(float delta) {
-        System.out.println("rendering game screen");
         Game.draw();
         Game.tick();
     }
