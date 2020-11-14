@@ -41,12 +41,13 @@ public class Game extends AbstractScreen {
     private final static ArrayList<Entity> entities = new ArrayList<Entity>();
     private final static HashMap<Team, Float[]> laneDividers = new HashMap<Team, Float[]>();
 
-    private int leg;
-    private float time;
-    private ShapeRenderer shapeRenderer;
-    private SpriteBatch batch;
-    private BitmapFont font;
-    private OrthographicCamera camera;
+    public static int leg = 0;
+    private static float time = 0;
+    private static ShapeRenderer shapeRenderer = new ShapeRenderer();
+    private static SpriteBatch batch = new SpriteBatch();
+    private static BitmapFont font = new BitmapFont();
+    private static OrthographicCamera camera = new OrthographicCamera(Game.WIDTH, Game.HEIGHT);
+    private static GameManager gameManager;
 
     /*
      * Declare our predefined boats here and append to the master HashMap
@@ -57,6 +58,9 @@ public class Game extends AbstractScreen {
         BOATS.put("Speedy", new int[] {42, 30, 10});
         BOATS.put("Twisty", new int[] {40, 32, 10});
         BOATS.put("Tanky", new int[] {38, 27, 15});
+
+        camera.setToOrtho(false);
+        shapeRenderer.setAutoShapeType(true);
     }
 
 
@@ -66,9 +70,9 @@ public class Game extends AbstractScreen {
      *
      * @param leg Leg number to start
      */
-    public void startLeg(int leg) {
+    public static void startLeg(int leg) {
         // Start new leg
-        this.leg = leg;
+        Game.leg = leg;
         generateObstacles(15); // TODO: Change by difficulty
 
         float seperation = ((Game.WIDTH - (2 * GRASS_BORDER_WIDTH)) / (npcs.size() + 1));
@@ -95,15 +99,15 @@ public class Game extends AbstractScreen {
      *
      * Perform cleanup & start new leg if required
      */
-    public void finishLeg() {
+    private static void finishLeg() {
         // Clean entities
         entities.clear();
 
         if (leg <= 2) {
-            startLeg(leg + 1);
+            Game.gameManager.sm.setScreen(ScreenManager.GAMESTATE.LegResult);
         } else {
             // Wow game is over!
-            this.gameManager.sm.setScreen(ScreenManager.GAMESTATE.Podium);
+            Game.gameManager.sm.setScreen(ScreenManager.GAMESTATE.Podium);
         }
     }
 
@@ -115,7 +119,7 @@ public class Game extends AbstractScreen {
      *
      * @return whether the current leg is finished
      */
-    public boolean legFinished() {
+    public static boolean legFinished() {
         if (leg == 0) return false; // There is no current leg running
 
         // Update player playing status & time
@@ -154,7 +158,8 @@ public class Game extends AbstractScreen {
      *  The main tick of the game is run periodically
      *  Calls all of it's known entities' ticks, as well as checks for win conditions
      */
-    public void tick(float delta) {
+    public static void tick() {
+        float delta = Gdx.graphics.getDeltaTime();
         time += delta;
 
         player.tick(delta);
@@ -190,6 +195,11 @@ public class Game extends AbstractScreen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.F1)) {
             Entity.DEBUG_HITBOXES = !Entity.DEBUG_HITBOXES;
         }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F2)) {
+            for (Team team : Game.getAllTeams()) {
+                team.boat.setPos(new Vector(team.boat.getPos().x, Game.MAP_HEIGHT));
+            }
+        }
 
     }
 
@@ -198,7 +208,7 @@ public class Game extends AbstractScreen {
      *
      *  Calls all of it's known entities' draw functions
      */
-    public void draw() {
+    public static void draw() {
 
         shapeRenderer.setProjectionMatrix(camera.combined);
         shapeRenderer.begin();
@@ -255,10 +265,22 @@ public class Game extends AbstractScreen {
 
     public static void addEntity(Entity entity) { entities.add(entity); }
     public static ArrayList<Entity> getEntities() { return entities; }
-    public static void addNPC(NPC npc) {
-        npcs.add(npc);
-    }
+    public static void addNPC(NPC npc) { npcs.add(npc); }
     public static Float[] getLaneDividers(Team team) { return laneDividers.get(team); }
+
+    /**
+     * Returns all the teams assigned to the game
+     *  This is all NPCs + Player
+     * @return Team[] of teams
+     */
+    public static Team[] getAllTeams() {
+        Team[] teams = new Team[npcs.size() + 1];
+        teams[0] = player;
+        for (int i = 0; i < npcs.size(); i++) {
+            teams[i+1] = npcs.get(i);
+        }
+        return teams;
+    }
 
 
     /**
@@ -340,26 +362,25 @@ public class Game extends AbstractScreen {
      */
     public Game(GameManager gameManager) {
         super(gameManager);
-
-        this.camera = new OrthographicCamera(Game.WIDTH, Game.HEIGHT);
-        this.camera.setToOrtho(false);
-        this.shapeRenderer = new ShapeRenderer();
-        this.shapeRenderer.setAutoShapeType(true);
-        this.font = new BitmapFont();
-        this.batch = new SpriteBatch();
+        Game.addRandomNPCs(3, 5);
+        Game.gameManager = gameManager;
     }
 
     @Override
+    public void tick(float delta) {}
+
+    @Override
     public void render(float delta) {
-        this.draw();
-        this.tick(delta);
+        System.out.println("rendering game screen");
+        Game.draw();
+        Game.tick();
     }
 
     @Override
     public void show() {
-        Game.addRandomNPCs(3, 5); // TODO: This can be changed in one of the screens maybe? For now, i'm just doing this
-        this.startLeg(1);
+        Game.startLeg(Game.leg + 1);
     }
+
 
     @Override
     public void pause() {}

@@ -10,7 +10,7 @@ import java.util.ArrayList;
  *
  * @author Devon
  */
-abstract class Team {
+public abstract class Team {
 
     public String name;
     private ArrayList<Float> last_times;
@@ -55,6 +55,15 @@ abstract class Team {
     public float getBestTime() {
         if (this.last_times.size() < 3) return 0;
         return Math.min(this.last_times.get(1), this.last_times.get(2));
+    }
+
+    /**
+     * Return the time this team got for the given leg
+     * @param leg Leg number
+     * @return Leg time INCLUDING PENALTY
+     */
+    public float getLegTime(int leg) {
+        return this.last_times.get(leg - 1);
     }
 
 
