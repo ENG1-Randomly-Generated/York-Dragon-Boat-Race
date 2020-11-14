@@ -40,8 +40,10 @@ public abstract class Obstacle extends DynamicEntity {
             boat.damage(this.hardness * boat.getDamageModifier());
             boat.setVelocity(boat.getVelocity().x * this.hardness, boat.getVelocity().y * this.hardness);
 
-            if (this.breakable && this.brokenTexture != null) {
+            if (this.breakable) {
                 this.setActive(false);
+            }
+            if (this.brokenTexture != null) {
                 this.setTexture(this.brokenTexture);
             }
         }
