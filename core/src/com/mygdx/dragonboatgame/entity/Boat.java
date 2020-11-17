@@ -99,7 +99,7 @@ public class Boat extends DynamicEntity {
 
         if (dx == 0 && dy == 0) return;
 
-        this.energy -= 5 * delta; // TODO: Make this variable (difficulty.. etc)
+        this.energy -= 5 * delta;
         if (this.energy < 0) this.energy = 0;
 
         this.addAcceleration(dx, dy);
@@ -120,7 +120,7 @@ public class Boat extends DynamicEntity {
      * @return double modifier
      */
     public float getDamageModifier() {
-        return (this.getVelocity().getMagnitude() / (21 - (5 * Game.leg))) + 1;
+        return (this.getVelocity().getMagnitude() / (12 - (2 * Game.leg))) + 1;
     }
 
     @Override
@@ -140,7 +140,7 @@ public class Boat extends DynamicEntity {
     public void tick(float delta) {
 
         if (this.non_accelerating_ticks > (1/delta)) {
-            this.energy += 10 * delta; // TODO: Change based on difficulty etc
+            this.energy += 10 * delta;
             if (energy > 100) energy = 100;
         }
 

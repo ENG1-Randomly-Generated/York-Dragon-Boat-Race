@@ -20,7 +20,7 @@ public class TeamNameInputScreen extends AbstractScreen{
 
 
     public TeamNameInputScreen(final GameManager gameManager){
-        super(gameManager); //TODO code here
+        super(gameManager);
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
         batch = new SpriteBatch();
@@ -42,7 +42,7 @@ public class TeamNameInputScreen extends AbstractScreen{
     public void render(float delta) {
         super.render(delta);
         batch.begin();
-        font.draw(batch, "ENTER TEAM NAME", Game.WIDTH/3.5f, Game.HEIGHT/1.5f);  //TODO make sure this looks good on all screens and aspect ratios
+        font.draw(batch, "ENTER TEAM NAME", Game.WIDTH/3.5f, Game.HEIGHT/1.5f);
         font.draw(batch, "Press ENTER to continue", Game.WIDTH / 4f, Game.HEIGHT / 5f);
         batch.end();
         stage.act(delta);

@@ -207,7 +207,7 @@ public class Game extends AbstractScreen {
             Boat boat = team.boat;
             Float[] aPos = entry.getValue();
             if (boat.getPos().x < aPos[0] || boat.getPos().x + boat.getSize().x > aPos[1]) {
-                team.addPenalty(delta * 2); // TODO: Make this scalable properly with difficulty or something
+                team.addPenalty(delta * 2);
             }
         }
 
@@ -220,17 +220,6 @@ public class Game extends AbstractScreen {
         // Update camera
         camera.position.set(camera.position.x, Math.min(Math.max(player.boat.getPos().y, Game.HEIGHT/2), Game.MAP_HEIGHT - Game.HEIGHT/2), 0);
         camera.update();
-
-        // Debug
-        // TODO: Remove this
-        if (Gdx.input.isKeyJustPressed(Input.Keys.F1)) {
-            Entity.DEBUG_HITBOXES = !Entity.DEBUG_HITBOXES;
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.F2)) {
-            for (Team team : Game.getAllTeams()) {
-                team.boat.setPos(new Vector(team.boat.getPos().x, Game.MAP_HEIGHT));
-            }
-        }
 
     }
 

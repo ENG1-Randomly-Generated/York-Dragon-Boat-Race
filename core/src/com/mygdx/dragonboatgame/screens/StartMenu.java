@@ -16,7 +16,7 @@ public class StartMenu extends AbstractScreen{
 
 
     public StartMenu(final GameManager gameManager){
-        super(gameManager); //TODO code here
+        super(gameManager);
         batch = new SpriteBatch();
         font = new BitmapFont(Gdx.files.internal("fonts/largefont.fnt"));
     }
@@ -33,7 +33,7 @@ public class StartMenu extends AbstractScreen{
     public void render(float delta) {
         super.render(delta);
         batch.begin();
-        font.draw(batch, "PRESS ENTER TO PLAY", Game.WIDTH/3.5f, Game.HEIGHT/2);  //TODO make sure this looks good on all screens and aspect ratios
+        font.draw(batch, "PRESS ENTER TO PLAY", Game.WIDTH/3.5f, Game.HEIGHT/2);
         batch.end();
     }
 

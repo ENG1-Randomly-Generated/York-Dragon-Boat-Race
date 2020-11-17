@@ -12,12 +12,10 @@ public abstract class AbstractScreen implements Screen {
 
     protected final GameManager gameManager; //THIS DOESN'T EXISTS
 
-    Stage stage;
     private ShapeRenderer shapeRenderer;
 
     public AbstractScreen(final GameManager gameManager) {
         this.gameManager = gameManager;
-        this.stage = new Stage(); // TODO see if we end up using STAGES or not, remove if not needed
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setAutoShapeType(true);
     }
@@ -48,12 +46,9 @@ public abstract class AbstractScreen implements Screen {
     }
 
     @Override
-    public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
-    }
+    public void resize(int width, int height) {}
+
 
     @Override
-    public void dispose() {
-        this.stage.dispose();
-    }
+    public void dispose() {}
 }

@@ -27,13 +27,12 @@ public class BoatSelectionScreen extends AbstractScreen {
 
 
     public BoatSelectionScreen(final GameManager gameManager) {
-        super(gameManager); //TODO code here
+        super(gameManager);
         currentBoatIndex = 0;
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setAutoShapeType(true);
         batch = new SpriteBatch();
         font = new BitmapFont(Gdx.files.internal("fonts/largefont.fnt"));
-        //Gdx.files.internal("entity/boat.png")
     }
 
 

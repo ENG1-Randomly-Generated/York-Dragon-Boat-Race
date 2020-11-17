@@ -26,9 +26,6 @@ public class GameManager extends Game {
     public void create() {
         sm = new ScreenManager(this);
         sm.setScreen(ScreenManager.GAMESTATE.StartMenu);
-        //TODO ADD ESSETS, BATCH and SHAPE BACTCH (shape render) here
-
-        //called when application (game is an extension of application is first created???
     }
 
     public void tick() {

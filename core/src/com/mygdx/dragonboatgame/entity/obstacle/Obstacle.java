@@ -9,7 +9,6 @@ import com.mygdx.dragonboatgame.util.Vector;
 
 /**
  * Represents a movable obstacle in the game
- *  TODO: Add damage / collisions here as this is a general case amongst all obstacles
  *
  * @author Devon
  */

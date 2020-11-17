@@ -31,9 +31,14 @@ public class Vector {
     }
 
     public boolean isZero() {
-        return this.x <= 0.001 && this.y <= 0.001;
+        return this.x == 0 && this.y == 0;
     }
 
+    /**
+     * Clamps given vector to a maximum magnitude
+     *
+     * @param max Maximum magnitude
+     */
     public void clamp(float max) {
         float over = this.getMagnitude() / max;
         if (over > 1) {
