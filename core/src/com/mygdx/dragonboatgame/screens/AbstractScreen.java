@@ -10,7 +10,7 @@ import com.mygdx.dragonboatgame.game.Game;
 
 public abstract class AbstractScreen implements Screen {
 
-    protected final GameManager gameManager; //THIS DOESN'T EXISTS
+    protected final GameManager gameManager;
 
     private ShapeRenderer shapeRenderer;
 
@@ -40,14 +40,10 @@ public abstract class AbstractScreen implements Screen {
         shapeRenderer.end();
 
         tick(delta);
-
-        //he puts the background in here
-
     }
 
     @Override
     public void resize(int width, int height) {}
-
 
     @Override
     public void dispose() {}

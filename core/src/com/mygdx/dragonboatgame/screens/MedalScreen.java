@@ -24,7 +24,7 @@ public class MedalScreen extends AbstractScreen {
     private boolean render;
 
 
-    public MedalScreen(final GameManager gameManager) { //int legNumber, Team[] teamsArray
+    public MedalScreen(final GameManager gameManager) {
         super(gameManager);
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setAutoShapeType(true);
@@ -105,22 +105,15 @@ public class MedalScreen extends AbstractScreen {
         }
 
         this.render = true;
-
     }
 
 
 
     @Override
-    public void pause() {
-
-    }
+    public void pause() {}
 
     @Override
-    public void resume() {
-
-
-
-    }
+    public void resume() {}
 
     @Override
     public void hide() {

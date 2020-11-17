@@ -18,7 +18,6 @@ public class ScreenManager {
         DragonBoatGame,
         LegResult,
         Finalists,
-        Podium,
         Medals
     }
 
@@ -27,6 +26,10 @@ public class ScreenManager {
         initScreens();
     }
 
+    /**
+     * Create instances of all screens required for the game
+     *  Each screen will handle their creation and have an instance of this gamemanager for requesting a switch
+     */
     private void initScreens() {
         this.screens = new HashMap<GAMESTATE, AbstractScreen>();
         this.screens.put(GAMESTATE.StartMenu, new StartMenu(gameManager));
@@ -36,15 +39,19 @@ public class ScreenManager {
         this.screens.put(GAMESTATE.LegResult, new LegResultScreen(gameManager));
         this.screens.put(GAMESTATE.Finalists, new FinalistsScreen(gameManager));
         this.screens.put(GAMESTATE.Medals, new MedalScreen(gameManager));
-        //add all other screens to this
     }
 
-    public void setScreen(GAMESTATE nextScreen) {
-        currentScreen = screens.get(nextScreen);
+    /**
+     * Set the game's screen to the one for the given GAMESTATE
+     *
+     * @param gamestate GAMESTATE for the next screen
+     */
+    public void setScreen(GAMESTATE gamestate) {
+        currentScreen = screens.get(gamestate);
         gameManager.setScreen(currentScreen);
     }
 
-    public AbstractScreen getScreen(){return currentScreen;}
+    public AbstractScreen getScreen(){ return currentScreen; }
 
     public void dispose(){
         for(AbstractScreen screen : screens.values()){

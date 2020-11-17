@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.mygdx.dragonboatgame.game.Game;
 
 
-public class TeamNameInputScreen extends AbstractScreen{
+public class TeamNameInputScreen extends AbstractScreen {
 
     private Stage stage;
     private SpriteBatch batch;
@@ -32,7 +32,7 @@ public class TeamNameInputScreen extends AbstractScreen{
 
     @Override
     public void tick(float delta) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) && textField.getText().length() > 0){
             Game.player.setName(textField.getText());
             gameManager.sm.setScreen(ScreenManager.GAMESTATE.BoatSelection);
         }
@@ -54,27 +54,19 @@ public class TeamNameInputScreen extends AbstractScreen{
     public void show() {
         textField.setPosition(Game.WIDTH/2.8f, Game.HEIGHT/2.2f);
         textField.setSize(Game.WIDTH/4,Game.HEIGHT/10);
-        textField.setMaxLength(9);
+        textField.setMaxLength(8);
         stage.addActor(textField);
         stage.setKeyboardFocus(textField);
     }
 
 
     @Override
-    public void pause() {
-
-    }
+    public void pause() {}
 
     @Override
-    public void resume() {
-
-
-
-    }
+    public void resume() {}
 
     @Override
-    public void hide() {
-
-    }
+    public void hide() {}
 
 }

@@ -37,6 +37,7 @@ public class LegResultScreen extends AbstractScreen {
         }
     }
 
+
     @Override
     public void render(float delta) {
         super.render(delta);
@@ -79,17 +80,11 @@ public class LegResultScreen extends AbstractScreen {
         this.teams = Game.getAllTeams();
     }
 
-
+    @Override
+    public void pause() {}
 
     @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
+    public void resume() {}
 
     @Override
     public void hide() {

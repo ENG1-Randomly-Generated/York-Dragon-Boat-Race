@@ -51,7 +51,7 @@ public class BoatSelectionScreen extends AbstractScreen {
         batch.draw(Boat.texture, Game.WIDTH *4.5f/ 6, Game.HEIGHT / 1.25f, Boat.size.x, Boat.size.y);
         font.draw(batch, currentBoatName, Game.WIDTH / 2.5f, Game.HEIGHT / 1.2f);
         font.draw(batch, "Speed", Game.WIDTH / 6, Game.HEIGHT / 1.5f);
-        font.draw(batch, "Manovourability", Game.WIDTH / 6, Game.HEIGHT / 2f);
+        font.draw(batch, "Manoeuvrability", Game.WIDTH / 6, Game.HEIGHT / 2f);
         font.draw(batch, "Robustness", Game.WIDTH / 6, Game.HEIGHT / 3f);
         font.draw(batch, "Previous: S", Game.WIDTH / 6, Game.HEIGHT / 10f);
         font.draw(batch, "Next: D", Game.WIDTH / 1.5f, Game.HEIGHT / 10f);
@@ -117,23 +117,20 @@ public class BoatSelectionScreen extends AbstractScreen {
         currentBoatStats = BOATS.get(currentBoatName);
     }
 
-    private void maxStatsCalc() {  //gets the highest possible specs of all the boats
-        maxStats[0] = currentBoatStats[0];
-        maxStats[1] = currentBoatStats[1];
-        maxStats[2] = currentBoatStats[2];
-        while (currentBoatIndex != boatNames.length - 1){
-            nextBoat();
-            if (maxStats[0] < currentBoatStats[0]){
-                maxStats[0]=currentBoatStats[0];
-            }
-            if (maxStats[1] < currentBoatStats[1])
-            {maxStats[1]=currentBoatStats[1];
-            }
-            if (maxStats[2] < currentBoatStats[2]){
-                maxStats[2]=currentBoatStats[2];
+
+    /**
+     * Calculate the maximum of each attribute for the boats
+     *  i.e. find what the maximum speed is among all boats, so we can display the stat bars relatively
+     *
+     */
+    private void maxStatsCalc() {
+        maxStats = new int[] {0,0,0};
+        for (Map.Entry<String, int[]> entry : Game.getBoats().entrySet()) {
+            int[] vals = entry.getValue();
+            for (int i = 0; i < 3; i++) {
+                maxStats[i] = Math.max(maxStats[i], vals[i]);
             }
         }
-        nextBoat();
     }
 
     @Override

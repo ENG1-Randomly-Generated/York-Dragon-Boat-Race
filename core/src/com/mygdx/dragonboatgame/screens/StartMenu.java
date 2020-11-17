@@ -9,7 +9,7 @@ import com.badlogic.gdx.Input;
 import com.mygdx.dragonboatgame.game.Game;
 
 
-public class StartMenu extends AbstractScreen{
+public class StartMenu extends AbstractScreen {
 
     private SpriteBatch batch;
     private BitmapFont font;
@@ -38,27 +38,15 @@ public class StartMenu extends AbstractScreen{
     }
 
     @Override
-    public void show() {
-
-    }
-
-
+    public void show() {}
 
     @Override
-    public void pause() {
-
-    }
+    public void pause() {}
 
     @Override
-    public void resume() {
-
-
-
-    }
+    public void resume() {}
 
     @Override
-    public void hide() {
-
-    }
+    public void hide() {}
 
 }
