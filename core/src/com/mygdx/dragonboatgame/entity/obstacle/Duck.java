@@ -13,6 +13,8 @@ public class Duck extends Obstacle {
     private static Texture TEXTURE = new Texture(Gdx.files.internal("entity/duck.png"));
     private static Texture BROKEN_TEXTURE = new Texture(Gdx.files.internal("entity/dead_duck.png"));
     private long randomMoveCooldown;
+    private int maxAcceleration;
+    private int cooldown;
 
     public Duck(Vector pos) {
         super(TEXTURE, pos, new Vector(20,20));
@@ -20,6 +22,8 @@ public class Duck extends Obstacle {
         this.setBrokenTexture(BROKEN_TEXTURE);
         this.setHardness(0.4f);
         this.randomMoveCooldown = 0;
+        this.maxAcceleration = 50 + (Game.leg * 25);
+        this.cooldown = 500 - (100 * Game.leg);
     }
 
     @Override
@@ -31,8 +35,8 @@ public class Duck extends Obstacle {
     public void tick(float delta) {
         super.tick(delta);
         if (randomMoveCooldown < System.currentTimeMillis()) {
-            this.setAcceleration(Game.random.nextInt(100) - 50, Game.random.nextInt(100) - 50);
-            randomMoveCooldown = System.currentTimeMillis() + 500;
+            this.setAcceleration(Game.random.nextInt(maxAcceleration) - (maxAcceleration/2f), Game.random.nextInt(maxAcceleration) - (maxAcceleration/2f));
+            randomMoveCooldown = System.currentTimeMillis() + cooldown;
         }
     }
 

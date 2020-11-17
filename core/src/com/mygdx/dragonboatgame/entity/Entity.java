@@ -18,6 +18,7 @@ import java.util.ArrayList;
 public abstract class Entity {
 
     public static boolean DEBUG_HITBOXES = false;
+    public static float COLLISION_OFFSET = 5;
 
     public static ArrayList<Entity> entities = new ArrayList<Entity>();
 
@@ -50,10 +51,10 @@ public abstract class Entity {
      * @return Whether entities are touching
      */
     public boolean isTouching(Entity other) {
-        return (this.pos.x < other.pos.x + other.size.x)
-                && (other.pos.x < this.pos.x + this.size.x)
-                && (this.pos.y < other.pos.y + other.size.y)
-                && (other.pos.y < this.pos.y + this.size.y);
+        return (this.pos.x < other.pos.x + other.size.x - COLLISION_OFFSET)
+                && (other.pos.x < this.pos.x + this.size.x - COLLISION_OFFSET)
+                && (this.pos.y < other.pos.y + other.size.y - COLLISION_OFFSET)
+                && (other.pos.y < this.pos.y + this.size.y - COLLISION_OFFSET);
     }
 
     /**

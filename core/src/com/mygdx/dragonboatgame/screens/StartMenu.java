@@ -25,7 +25,7 @@ public class StartMenu extends AbstractScreen{
     @Override
     public void tick(float delta) {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
-            gameManager.sm.setScreen(ScreenManager.GAMESTATE.BoatSelection);
+            gameManager.sm.setScreen(ScreenManager.GAMESTATE.TeamNameInput);
         }
     }
 

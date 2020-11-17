@@ -13,7 +13,7 @@ public class Rock extends Obstacle {
 
     public Rock(Vector pos) {
         super(TEXTURE, pos, new Vector(25,25));
-        this.setBreakable(true);
+        this.setBreakable(false);
         this.setHardness(1f);
     }
 

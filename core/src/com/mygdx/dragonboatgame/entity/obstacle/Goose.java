@@ -12,6 +12,8 @@ public class Goose extends Obstacle {
     private static Texture TEXTURE = new Texture(Gdx.files.internal("entity/goose.png"));
     private static Texture BROKEN_TEXTURE = new Texture(Gdx.files.internal("entity/dead_goose.png"));
     private long randomMoveCooldown;
+    private int maxAcceleration;
+    private int cooldown;
 
     public Goose(Vector pos) {
         super(TEXTURE, pos, new Vector(20,20));
@@ -19,6 +21,8 @@ public class Goose extends Obstacle {
         this.setHardness(0.5f);
         this.setBrokenTexture(BROKEN_TEXTURE);
         this.randomMoveCooldown = 0;
+        this.maxAcceleration = 40 + (Game.leg * 20);
+        this.cooldown = 500 - (100 * Game.leg);
     }
 
     @Override
@@ -30,8 +34,8 @@ public class Goose extends Obstacle {
     public void tick(float delta) {
         super.tick(delta);
         if (randomMoveCooldown < System.currentTimeMillis()) {
-            this.setAcceleration(Game.random.nextInt(100) - 50, Game.random.nextInt(100) - 50);
-            randomMoveCooldown = System.currentTimeMillis() + 500;
+            this.setAcceleration(Game.random.nextInt(maxAcceleration) - (maxAcceleration/2f), Game.random.nextInt(maxAcceleration) - (maxAcceleration/2f));
+            randomMoveCooldown = System.currentTimeMillis() + cooldown;
         }
     }
 }

@@ -34,6 +34,8 @@ public class Game extends AbstractScreen {
     public static final float HEIGHT = Gdx.graphics.getHeight();
     public static final float MAP_HEIGHT = 1000;
     public static final float GRASS_BORDER_WIDTH = WIDTH/8;
+    public static final Color GRASS_COLOR = new Color(36/255f, 115/255f, 35/255f, 1);
+
     public final static Player player = new Player("Player", Color.WHITE);
     private final static HashMap<String, int[]> BOATS = new HashMap<String, int[]>();
     public final static Random random = new Random();
@@ -73,7 +75,7 @@ public class Game extends AbstractScreen {
     public static void startLeg(int leg) {
         // Start new leg
         Game.leg = leg;
-        generateObstacles(15); // TODO: Change by difficulty
+        generateObstacles(10 + (Game.leg * 5));
 
         float seperation;
         if (Game.leg < 4) {
@@ -245,11 +247,11 @@ public class Game extends AbstractScreen {
         // Draw basic scene
 
         shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(Color.GREEN);
+        shapeRenderer.setColor(GRASS_COLOR);
         shapeRenderer.rect(0, 0, GRASS_BORDER_WIDTH, Game.MAP_HEIGHT);
         shapeRenderer.setColor(Color.BLUE);
         shapeRenderer.rect(GRASS_BORDER_WIDTH, 0, WIDTH -  (2 * GRASS_BORDER_WIDTH), Game.MAP_HEIGHT);
-        shapeRenderer.setColor(Color.GREEN);
+        shapeRenderer.setColor(GRASS_COLOR);
         shapeRenderer.rect(Game.WIDTH - GRASS_BORDER_WIDTH, 0, GRASS_BORDER_WIDTH, Game.MAP_HEIGHT);
 
         // Draw lane dividers
@@ -315,12 +317,11 @@ public class Game extends AbstractScreen {
     /**
      * Generates random obstacles across the course
      *
-     * TODO: Random spread function, and actual implementation
-     * @param n Number of obstacles to be placed (TODO: Remove, based on difficulty instead)
+     * @param n Number of obstacles to be placed
      */
     public static void generateObstacles(int n) {
         for (int i = 0; i < n; i++) {
-            Vector newPos = new Vector(random.nextInt((int)(Game.WIDTH - (2*Game.GRASS_BORDER_WIDTH))) + Game.GRASS_BORDER_WIDTH, random.nextInt((int)Game.MAP_HEIGHT));
+            Vector newPos = new Vector(random.nextInt((int)(Game.WIDTH - (2*Game.GRASS_BORDER_WIDTH))) + Game.GRASS_BORDER_WIDTH, 200 + random.nextInt((int)Game.MAP_HEIGHT - 200));
             switch (Game.random.nextInt(4)) {
                 case 0:
                     addEntity(new Duck(newPos));
@@ -406,9 +407,8 @@ public class Game extends AbstractScreen {
 
     @Override
     public void show() {
-        Game.startLeg(Game.leg + 1);
+        Game.startLeg((Game.leg + 1) % 5);
     }
-
 
     @Override
     public void pause() {}

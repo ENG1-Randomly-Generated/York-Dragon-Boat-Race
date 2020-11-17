@@ -17,7 +17,6 @@ public class TeamNameInputScreen extends AbstractScreen{
     private BitmapFont font;
     private TextField textField;
     private Skin skin;
-    private float time = 0;
 
 
     public TeamNameInputScreen(final GameManager gameManager){
@@ -33,10 +32,9 @@ public class TeamNameInputScreen extends AbstractScreen{
 
     @Override
     public void tick(float delta) {
-        time +=delta;
-        if (getEnter() && time>1.5f){
-            //TODO set textField to be equal to teamname
-            gameManager.sm.setScreen(ScreenManager.GAMESTATE.LegResult);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
+            Game.player.setName(textField.getText());
+            gameManager.sm.setScreen(ScreenManager.GAMESTATE.BoatSelection);
         }
     }
 
@@ -50,10 +48,6 @@ public class TeamNameInputScreen extends AbstractScreen{
         stage.act(delta);
         stage.draw();
 
-    }
-
-    private boolean getEnter() {
-        return Gdx.input.isKeyPressed(Input.Keys.ENTER);
     }
 
     @Override

@@ -32,11 +32,11 @@ public abstract class AbstractScreen implements Screen {
         shapeRenderer.begin();
 
         shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(Color.GREEN);
+        shapeRenderer.setColor(Game.GRASS_COLOR);
         shapeRenderer.rect(0, 0, Game.GRASS_BORDER_WIDTH, Game.HEIGHT);
         shapeRenderer.setColor(Color.BLUE);
         shapeRenderer.rect(Game.GRASS_BORDER_WIDTH, 0, Game.WIDTH -  (2 * Game.GRASS_BORDER_WIDTH), Game.HEIGHT);
-        shapeRenderer.setColor(Color.GREEN);
+        shapeRenderer.setColor(Game.GRASS_COLOR);
         shapeRenderer.rect(com.mygdx.dragonboatgame.game.Game.WIDTH - Game.GRASS_BORDER_WIDTH, 0, Game.GRASS_BORDER_WIDTH, Game.HEIGHT);
 
         shapeRenderer.end();

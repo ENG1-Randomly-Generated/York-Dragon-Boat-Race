@@ -116,14 +116,11 @@ public class Boat extends DynamicEntity {
     /**
      * Return the damage modifier in the case of a collision with this boat
      *  e.g. take into account the velocity, acceleration, size, etc
-     *      TODO: Maybe robustness can make an affect?
-     *      TODO: Add other modifiers, rn we only care about velocity
-     *      TODO: Change with difficulty ???
      *
      * @return double modifier
      */
     public float getDamageModifier() {
-        return (this.getVelocity().getMagnitude() / 30) + 1;
+        return (this.getVelocity().getMagnitude() / (21 - (5 * Game.leg))) + 1;
     }
 
     @Override
