@@ -56,6 +56,7 @@ public abstract class Team {
      */
     public float getBestTime() {
         if (this.last_times.size() < 3) return 0;
+
         return Math.min(this.last_times.get(1), this.last_times.get(2));
     }
 

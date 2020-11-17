@@ -58,9 +58,15 @@ public class LegResultScreen extends AbstractScreen {
             float legTime = team.getLegTime(Game.leg); // Leg time INKL Penalty
             float penalty = team.getPenalty();
 
-            font.draw(batch, DECIMAL_FORMAT.format(legTime - penalty) + "s", Game.WIDTH * 0.29f, height);
-            font.draw(batch, DECIMAL_FORMAT.format(penalty) + "s", Game.WIDTH * 0.46f, height);
-            font.draw(batch, DECIMAL_FORMAT.format(legTime) + "s", Game.WIDTH * 0.7f, height);
+            if (legTime == Float.MAX_VALUE) {
+                font.draw(batch, "DNF", Game.WIDTH * 0.29f, height);
+                font.draw(batch, "DNF", Game.WIDTH * 0.46f, height);
+                font.draw(batch, "DNF", Game.WIDTH * 0.7f, height);
+            } else {
+                font.draw(batch, DECIMAL_FORMAT.format(legTime - penalty) + "s", Game.WIDTH * 0.29f, height);
+                font.draw(batch, DECIMAL_FORMAT.format(penalty) + "s", Game.WIDTH * 0.46f, height);
+                font.draw(batch, DECIMAL_FORMAT.format(legTime) + "s", Game.WIDTH * 0.7f, height);
+            }
         }
         batch.end();
     }
