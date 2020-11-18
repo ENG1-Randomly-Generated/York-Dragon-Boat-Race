@@ -11,12 +11,14 @@ public class Goose extends Obstacle {
 
     private static Texture TEXTURE = new Texture(Gdx.files.internal("entity/goose.png"));
     private static Texture BROKEN_TEXTURE = new Texture(Gdx.files.internal("entity/dead_goose.png"));
+    public static Vector SIZE = new Vector(20,20);
+
     private long randomMoveCooldown;
     private int maxAcceleration;
     private int cooldown;
 
     public Goose(Vector pos) {
-        super(TEXTURE, pos, new Vector(20,20));
+        super(TEXTURE, pos, SIZE);
         this.setBreakable(true);
         this.setHardness(0.5f);
         this.setBrokenTexture(BROKEN_TEXTURE);

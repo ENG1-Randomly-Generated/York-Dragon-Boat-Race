@@ -47,8 +47,8 @@ public class BoatSelectionScreen extends AbstractScreen {
 
         batch.begin();
         
-        batch.draw(Boat.texture, Game.WIDTH / 6, Game.HEIGHT / 1.25f, Boat.size.x, Boat.size.y);
-        batch.draw(Boat.texture, Game.WIDTH *4.5f/ 6, Game.HEIGHT / 1.25f, Boat.size.x, Boat.size.y);
+        batch.draw(Boat.TEXTURE, Game.WIDTH / 6, Game.HEIGHT / 1.25f, Boat.SIZE.x, Boat.SIZE.y);
+        batch.draw(Boat.TEXTURE, Game.WIDTH *4.5f/ 6, Game.HEIGHT / 1.25f, Boat.SIZE.x, Boat.SIZE.y);
         font.draw(batch, currentBoatName, Game.WIDTH / 2.5f, Game.HEIGHT / 1.2f);
         font.draw(batch, "Speed", Game.WIDTH / 6, Game.HEIGHT / 1.5f);
         font.draw(batch, "Manoeuvrability", Game.WIDTH / 6, Game.HEIGHT / 2f);

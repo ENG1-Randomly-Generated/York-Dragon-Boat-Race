@@ -11,9 +11,10 @@ public class Log extends Obstacle {
 
     private static Texture TEXTURE = new Texture(Gdx.files.internal("entity/log.png"));
     private static Texture BROKEN_TEXTURE = new Texture(Gdx.files.internal("entity/broken_log.png"));
+    public static Vector SIZE = new Vector(30,30);
 
     public Log(Vector pos) {
-        super(TEXTURE, pos, new Vector(30,30));
+        super(TEXTURE, pos, SIZE);
         this.setBreakable(true);
         this.setBrokenTexture(BROKEN_TEXTURE);
         this.setHardness(0.2f);

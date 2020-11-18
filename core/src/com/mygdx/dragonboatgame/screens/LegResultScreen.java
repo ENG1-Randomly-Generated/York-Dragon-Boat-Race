@@ -42,8 +42,8 @@ public class LegResultScreen extends AbstractScreen {
     public void render(float delta) {
         super.render(delta);
         batch.begin();
-        batch.draw(Boat.texture, Game.WIDTH / 6, Game.HEIGHT / 1.25f, Boat.size.x, Boat.size.y);
-        batch.draw(Boat.texture, Game.WIDTH *4.5f/ 6, Game.HEIGHT / 1.25f, Boat.size.x, Boat.size.y);
+        batch.draw(Boat.TEXTURE, Game.WIDTH / 6, Game.HEIGHT / 1.25f, Boat.SIZE.x, Boat.SIZE.y);
+        batch.draw(Boat.TEXTURE, Game.WIDTH *4.5f/ 6, Game.HEIGHT / 1.25f, Boat.SIZE.x, Boat.SIZE.y);
         font.draw(batch, "Time", Game.WIDTH * 0.3f, Game.HEIGHT / 1.3f);
         font.draw(batch, "Penalty", Game.WIDTH * 0.45f, Game.HEIGHT / 1.3f);
         font.draw(batch, "Result", Game.WIDTH * 0.68f, Game.HEIGHT / 1.3f);

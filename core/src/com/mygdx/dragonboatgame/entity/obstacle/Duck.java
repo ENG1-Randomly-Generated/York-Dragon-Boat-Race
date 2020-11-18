@@ -11,13 +11,15 @@ import com.mygdx.dragonboatgame.util.Vector;
 public class Duck extends Obstacle {
 
     private static Texture TEXTURE = new Texture(Gdx.files.internal("entity/duck.png"));
+    public static Vector SIZE = new Vector(20,20);
     private static Texture BROKEN_TEXTURE = new Texture(Gdx.files.internal("entity/dead_duck.png"));
+
     private long randomMoveCooldown;
     private int maxAcceleration;
     private int cooldown;
 
     public Duck(Vector pos) {
-        super(TEXTURE, pos, new Vector(20,20));
+        super(TEXTURE, pos, SIZE);
         this.setBreakable(true);
         this.setBrokenTexture(BROKEN_TEXTURE);
         this.setHardness(0.4f);

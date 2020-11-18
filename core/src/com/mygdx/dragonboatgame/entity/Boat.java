@@ -2,14 +2,12 @@ package com.mygdx.dragonboatgame.entity;
 
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.mygdx.dragonboatgame.entity.obstacle.Obstacle;
 import com.mygdx.dragonboatgame.game.Game;
 import com.mygdx.dragonboatgame.util.Vector;
 
@@ -24,8 +22,8 @@ public class Boat extends DynamicEntity {
     protected String name;
     protected String team_name;
 
-    public static Texture texture = new Texture(Gdx.files.internal("entity/boat.png"));
-    public static Vector size = new Vector(50,100);
+    public static Texture TEXTURE = new Texture(Gdx.files.internal("entity/boat.png"));
+    public static Vector SIZE = new Vector(50,100);
 
 
     public final float max_speed;
@@ -41,7 +39,7 @@ public class Boat extends DynamicEntity {
     private SpriteBatch batch;
 
     public Boat(String name, float max_speed, float maneuverability, float max_robustness) {
-        super(texture, new Vector(0, 0), size);
+        super(TEXTURE, new Vector(0, 0), SIZE);
 
         this.name = name;
         this.max_speed = max_speed;
