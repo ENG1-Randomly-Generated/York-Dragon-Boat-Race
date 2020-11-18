@@ -26,11 +26,15 @@ public class TeamNameInputScreen extends AbstractScreen {
     public TeamNameInputScreen(final GameManager gameManager){
         super(gameManager);
         stage = new Stage();
-        Gdx.input.setInputProcessor(stage);
         batch = new SpriteBatch();
         font = new BitmapFont(Gdx.files.internal("fonts/largefont.fnt"));
         skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
         textField = new TextField("", skin);
+
+        textField.setSize(Game.WIDTH * 0.33f,Game.HEIGHT * 0.05f);
+        textField.setPosition(Game.WIDTH / 2 - textField.getWidth() / 2, Game.HEIGHT * 0.4f);
+        textField.setMaxLength(5);
+        stage.addActor(textField);
 
         enterTeamNameText = registerText(font, "Enter your team name:");
         pressEnterText = registerText(font, "Press ENTER to continue");
@@ -61,11 +65,8 @@ public class TeamNameInputScreen extends AbstractScreen {
 
     @Override
     public void show() {
-        textField.setSize(Game.WIDTH * 0.33f,Game.HEIGHT * 0.05f);
-        textField.setPosition(Game.WIDTH / 2 - textField.getWidth() / 2, Game.HEIGHT * 0.4f);
-        textField.setMaxLength(5);
-        stage.addActor(textField);
         stage.setKeyboardFocus(textField);
+        Gdx.input.setInputProcessor(stage);
     }
 
 
