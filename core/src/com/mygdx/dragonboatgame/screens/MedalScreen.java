@@ -12,7 +12,6 @@ import com.mygdx.dragonboatgame.game.Team;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 
 public class MedalScreen extends AbstractScreen {
@@ -51,8 +50,8 @@ public class MedalScreen extends AbstractScreen {
 
         batch.begin();
 
-        batch.draw(Boat.texture, Game.WIDTH / 6, Game.HEIGHT / 1.25f, Boat.size.x, Boat.size.y);
-        batch.draw(Boat.texture, Game.WIDTH *4.5f/ 6, Game.HEIGHT / 1.25f, Boat.size.x, Boat.size.y);
+        batch.draw(Boat.TEXTURE, Game.WIDTH / 6, Game.HEIGHT / 1.25f, Boat.SIZE.x, Boat.SIZE.y);
+        batch.draw(Boat.TEXTURE, Game.WIDTH *4.5f/ 6, Game.HEIGHT / 1.25f, Boat.SIZE.x, Boat.SIZE.y);
         font.draw(batch, "The results are in!", Game.WIDTH / 3.5f, Game.HEIGHT / 1.1f);
         font.draw(batch, "Press ENTER to exit", Game.WIDTH / 4f, Game.HEIGHT / 5.5f);
 

@@ -29,6 +29,7 @@ public abstract class Entity {
     protected Texture texture;
     protected boolean isVisible;
     protected boolean active;
+    protected float rotation;
 
 
     public Entity(Texture texture, Vector pos, Vector size) {
@@ -40,6 +41,7 @@ public abstract class Entity {
         this.active = true;
         this.shapeRenderer = new ShapeRenderer();
         this.shapeRenderer.setAutoShapeType(true);
+        this.rotation = 0;
 
         entities.add(this); // Register this entity in global list
     }
@@ -88,15 +90,17 @@ public abstract class Entity {
     public void setActive(boolean active) { this.active = active; }
     public Texture getTexture() { return texture; }
     public void setTexture(Texture texture) { this.texture = texture; }
-
+    public float getRotation() { return rotation; }
+    public void setRotation(float rotation) { this.rotation = rotation; }
 
     public void draw(Camera camera) {
         if (!isVisible) return;
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        batch.draw(texture, pos.x, pos.y, size.x, size.y);
+        batch.draw(texture, pos.x, pos.y, size.x/2, size.y/2, size.x, size.y, 1f, 1f, rotation, 0, 0, texture.getWidth(), texture.getHeight(), false, false);
         batch.end();
+
 
         if (DEBUG_HITBOXES) {
             shapeRenderer.setProjectionMatrix(camera.combined);

@@ -7,8 +7,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Matrix4;
 import com.mygdx.dragonboatgame.entity.Boat;
 import com.mygdx.dragonboatgame.entity.Entity;
+import com.mygdx.dragonboatgame.entity.Spectator;
 import com.mygdx.dragonboatgame.entity.obstacle.Duck;
 import com.mygdx.dragonboatgame.entity.obstacle.Goose;
 import com.mygdx.dragonboatgame.entity.obstacle.Log;
@@ -46,6 +48,7 @@ public class Game extends AbstractScreen {
     public static int leg = 0;
     private static float time = 0;
     private static ShapeRenderer shapeRenderer = new ShapeRenderer();
+    private static ShapeRenderer shapeRenderer2 = new ShapeRenderer();
     private static SpriteBatch batch = new SpriteBatch();
     private static BitmapFont font = new BitmapFont();
     private static OrthographicCamera camera = new OrthographicCamera(Game.WIDTH, Game.HEIGHT);
@@ -63,6 +66,7 @@ public class Game extends AbstractScreen {
 
         camera.setToOrtho(false);
         shapeRenderer.setAutoShapeType(true);
+        shapeRenderer2.setAutoShapeType(true);
     }
 
 
@@ -88,6 +92,7 @@ public class Game extends AbstractScreen {
         player.boat.setPos(new Vector(GRASS_BORDER_WIDTH + seperation/2, 0));
         laneDividers.put(player, new Float[] {GRASS_BORDER_WIDTH, GRASS_BORDER_WIDTH + seperation});
         player.setPlaying(true);
+        player.boat.setVisible(true);
         player.setPenalty(0);
         for (int i = 0; i < npcs.size(); i++) {
             NPC npc = npcs.get(i);
@@ -97,6 +102,7 @@ public class Game extends AbstractScreen {
             npc.boat.reset();
             npc.setPenalty(0);
             npc.boat.setPos(new Vector(Game.GRASS_BORDER_WIDTH + (seperation * (i+1)) + seperation/2, 0));
+            npc.boat.setVisible(true);
             npc.setPlaying(true);
             npc.init();
         }
@@ -112,6 +118,10 @@ public class Game extends AbstractScreen {
         // Clean entities
         entities.clear();
         laneDividers.clear();
+
+        for (Team team : Game.getAllTeams()) {
+            team.boat.setVisible(false);
+        }
 
         if (leg <= 2) {
             Game.gameManager.sm.setScreen(ScreenManager.GAMESTATE.LegResult);
@@ -221,6 +231,16 @@ public class Game extends AbstractScreen {
         camera.position.set(camera.position.x, Math.min(Math.max(player.boat.getPos().y, Game.HEIGHT/2), Game.MAP_HEIGHT - Game.HEIGHT/2), 0);
         camera.update();
 
+
+        // TODO: Remove
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F1)) {
+            Game.player.boat.setPos(new Vector(player.boat.getPos().x, Game.MAP_HEIGHT));
+            for (NPC npc : npcs) {
+                npc.boat.setPos(new Vector(npc.boat.getPos().x, Game.MAP_HEIGHT));
+                npc.addPenalty(10f);
+            }
+        }
+
     }
 
     /**
@@ -234,7 +254,6 @@ public class Game extends AbstractScreen {
         shapeRenderer.begin();
 
         // Draw basic scene
-
         shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(GRASS_COLOR);
         shapeRenderer.rect(0, 0, GRASS_BORDER_WIDTH, Game.MAP_HEIGHT);
@@ -259,15 +278,8 @@ public class Game extends AbstractScreen {
             }
         }
 
+
         shapeRenderer.end();
-
-
-        batch.begin();
-        font.draw(batch, "Leg: " + ((leg < 4) ? leg : "Finals"), 10, Game.HEIGHT - 5);
-        font.draw(batch, "Time: " + Math.floor(time) + "s", 10, Game.HEIGHT - 20);
-        font.draw(batch, "Penalty: " + Math.floor(player.getPenalty()) + "s", 10, Game.HEIGHT - 35);
-        batch.end();
-
 
 
         for (Entity entity: entities) {
@@ -279,6 +291,24 @@ public class Game extends AbstractScreen {
         for (NPC npc: npcs) {
             npc.boat.draw(camera);
         }
+
+
+        // Draw leg progression
+        shapeRenderer2.begin();
+        shapeRenderer2.set(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer2.setColor(Color.WHITE);
+        shapeRenderer2.rect(10, Game.HEIGHT - 85, Game.MAP_HEIGHT / 10, 10);
+        shapeRenderer2.setColor(Color.YELLOW);
+        shapeRenderer2.rect(10, Game.HEIGHT - 85, Game.player.boat.getPos().y / 10, 10);
+        shapeRenderer2.end();
+
+
+        batch.begin();
+        font.draw(batch, "Leg: " + ((leg < 4) ? leg : "Finals"), 10, Game.HEIGHT - 5);
+        font.draw(batch, "Time: " + Math.floor(time) + "s", 10, Game.HEIGHT - 20);
+        font.draw(batch, "Penalty: " + Math.floor(player.getPenalty()) + "s", 10, Game.HEIGHT - 35);
+        font.draw(batch, "Progression: ", 10, Game.HEIGHT - 60);
+        batch.end();
 
     }
 
@@ -310,7 +340,7 @@ public class Game extends AbstractScreen {
      */
     public static void generateObstacles(int n) {
         for (int i = 0; i < n; i++) {
-            Vector newPos = new Vector(random.nextInt((int)(Game.WIDTH - (2*Game.GRASS_BORDER_WIDTH))) + Game.GRASS_BORDER_WIDTH, 200 + random.nextInt((int)Game.MAP_HEIGHT - 200));
+            Vector newPos = new Vector(random.nextInt((int)(Game.WIDTH - (2*Game.GRASS_BORDER_WIDTH))) + Game.GRASS_BORDER_WIDTH, Boat.SIZE.y + random.nextInt((int)Game.MAP_HEIGHT - 200));
             switch (Game.random.nextInt(4)) {
                 case 0:
                     addEntity(new Duck(newPos));
@@ -338,6 +368,24 @@ public class Game extends AbstractScreen {
         for (int i = 0; i < n; i++) {
             NPC npc = new NPC("Bot" + npcs.size(), new Color(random.nextFloat(), random.nextFloat(), random.nextFloat(), 1), Game.getRandomBoat(), difficulty);
             npcs.add(npc);
+        }
+    }
+
+    /**
+     *  Generates n amount of spectators with random positions on the grass
+     *
+     * @param n Number of spectators to generate
+     */
+    public static void addSpectators(int n) {
+        for (int i = 0; i < n; i++) {
+            Vector newPos;
+            if (i % 2 == 0) {
+                newPos = new Vector(random.nextInt((int)(Game.GRASS_BORDER_WIDTH - Spectator.SIZE.x)), random.nextInt((int) Game.MAP_HEIGHT));
+            } else {
+                newPos = new Vector(Game.WIDTH - Game.GRASS_BORDER_WIDTH + random.nextInt((int)(Game.GRASS_BORDER_WIDTH - Spectator.SIZE.x)), random.nextInt((int)Game.MAP_HEIGHT));
+            }
+
+            entities.add(new Spectator(newPos, i % 2 == 0));
         }
     }
 
@@ -396,6 +444,7 @@ public class Game extends AbstractScreen {
 
     @Override
     public void show() {
+        Game.addSpectators(30);
         Game.startLeg((Game.leg + 1) % 5);
     }
 

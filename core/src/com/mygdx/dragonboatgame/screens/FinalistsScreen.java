@@ -42,8 +42,8 @@ public class FinalistsScreen extends AbstractScreen {
     public void render(float delta) {
         super.render(delta);
         batch.begin();
-        batch.draw(Boat.texture, Game.WIDTH / 6, Game.HEIGHT / 1.25f, Boat.size.x, Boat.size.y);
-        batch.draw(Boat.texture, Game.WIDTH *4.5f/ 6, Game.HEIGHT / 1.25f, Boat.size.x, Boat.size.y);
+        batch.draw(Boat.TEXTURE, Game.WIDTH / 6, Game.HEIGHT / 1.25f, Boat.SIZE.x, Boat.SIZE.y);
+        batch.draw(Boat.TEXTURE, Game.WIDTH *4.5f/ 6, Game.HEIGHT / 1.25f, Boat.SIZE.x, Boat.SIZE.y);
         font.draw(batch, "The Finalists are", Game.WIDTH / 3.5f, Game.HEIGHT * 0.95f);
         font.draw(batch, "Press ENTER to continue", Game.WIDTH / 4f, Game.HEIGHT * 0.08f);
 
