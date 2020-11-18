@@ -16,7 +16,7 @@ public class FinalistsScreen extends AbstractScreen {
     private float teamSepY;
 
 
-    public FinalistsScreen(final GameManager gameManager) { //int legNumber, Team[] teamsArray
+    public FinalistsScreen(final GameManager gameManager) {
         super(gameManager);
         batch = new SpriteBatch();
         font = new BitmapFont(Gdx.files.internal("fonts/largefont.fnt"));
@@ -31,8 +31,7 @@ public class FinalistsScreen extends AbstractScreen {
             if (Game.player.hasQualified()) {
                 gameManager.sm.setScreen(ScreenManager.GAMESTATE.DragonBoatGame);
             } else {
-                System.out.println("You did not qualify"); // TODO: Screen for this :)
-                System.exit(0);
+                gameManager.sm.setScreen(ScreenManager.GAMESTATE.Lost);
             }
         }
     }
@@ -41,6 +40,7 @@ public class FinalistsScreen extends AbstractScreen {
     @Override
     public void render(float delta) {
         super.render(delta);
+
         batch.begin();
         batch.draw(Boat.TEXTURE, Game.WIDTH / 6, Game.HEIGHT / 1.25f, Boat.SIZE.x, Boat.SIZE.y);
         batch.draw(Boat.TEXTURE, Game.WIDTH *4.5f/ 6, Game.HEIGHT / 1.25f, Boat.SIZE.x, Boat.SIZE.y);

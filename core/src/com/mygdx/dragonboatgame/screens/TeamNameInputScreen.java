@@ -2,6 +2,7 @@ package com.mygdx.dragonboatgame.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -18,6 +19,9 @@ public class TeamNameInputScreen extends AbstractScreen {
     private TextField textField;
     private Skin skin;
 
+    private GlyphLayout enterTeamNameText;
+    private GlyphLayout pressEnterText;
+
 
     public TeamNameInputScreen(final GameManager gameManager){
         super(gameManager);
@@ -27,6 +31,9 @@ public class TeamNameInputScreen extends AbstractScreen {
         font = new BitmapFont(Gdx.files.internal("fonts/largefont.fnt"));
         skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
         textField = new TextField("", skin);
+
+        enterTeamNameText = registerText(font, "Enter your team name:");
+        pressEnterText = registerText(font, "Press ENTER to continue");
     }
 
 
@@ -41,10 +48,12 @@ public class TeamNameInputScreen extends AbstractScreen {
     @Override
     public void render(float delta) {
         super.render(delta);
+
         batch.begin();
-        font.draw(batch, "ENTER TEAM NAME", Game.WIDTH/3.5f, Game.HEIGHT/1.5f);
-        font.draw(batch, "Press ENTER to continue", Game.WIDTH / 4f, Game.HEIGHT / 5f);
+        font.draw(batch, enterTeamNameText, Game.WIDTH / 2 - enterTeamNameText.width / 2, Game.HEIGHT * 0.6f);
+        font.draw(batch, pressEnterText, Game.WIDTH / 2 - pressEnterText.width / 2, Game.HEIGHT * 0.1f);
         batch.end();
+
         stage.act(delta);
         stage.draw();
 
@@ -52,9 +61,9 @@ public class TeamNameInputScreen extends AbstractScreen {
 
     @Override
     public void show() {
-        textField.setPosition(Game.WIDTH/2.8f, Game.HEIGHT/2.2f);
-        textField.setSize(Game.WIDTH/4,Game.HEIGHT/10);
-        textField.setMaxLength(8);
+        textField.setSize(Game.WIDTH * 0.33f,Game.HEIGHT * 0.05f);
+        textField.setPosition(Game.WIDTH / 2 - textField.getWidth() / 2, Game.HEIGHT * 0.4f);
+        textField.setMaxLength(5);
         stage.addActor(textField);
         stage.setKeyboardFocus(textField);
     }

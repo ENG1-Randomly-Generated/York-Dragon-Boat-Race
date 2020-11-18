@@ -3,6 +3,7 @@ package com.mygdx.dragonboatgame.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.Input;
@@ -13,12 +14,17 @@ public class StartMenu extends AbstractScreen {
 
     private SpriteBatch batch;
     private BitmapFont font;
+    private GlyphLayout dragonBoatGameText;
+    private GlyphLayout pressEnterText;
 
 
     public StartMenu(final GameManager gameManager){
         super(gameManager);
         batch = new SpriteBatch();
         font = new BitmapFont(Gdx.files.internal("fonts/largefont.fnt"));
+
+        this.dragonBoatGameText = registerText(font, "York Dragon Boat Game");
+        this.pressEnterText = registerText(font, "Press ENTER to continue");
     }
 
 
@@ -33,7 +39,10 @@ public class StartMenu extends AbstractScreen {
     public void render(float delta) {
         super.render(delta);
         batch.begin();
-        font.draw(batch, "PRESS ENTER TO PLAY", Game.WIDTH/3.5f, Game.HEIGHT/2);
+
+        font.draw(batch, dragonBoatGameText, Game.WIDTH / 2 - dragonBoatGameText.width / 2, Game.HEIGHT * 0.65f);
+        font.draw(batch, pressEnterText, Game.WIDTH / 2 - pressEnterText.width / 2, Game.HEIGHT * 0.1f);
+
         batch.end();
     }
 

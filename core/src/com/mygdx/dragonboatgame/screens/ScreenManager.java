@@ -18,7 +18,8 @@ public class ScreenManager {
         DragonBoatGame,
         LegResult,
         Finalists,
-        Medals
+        Medals,
+        Lost
     }
 
     public ScreenManager(final GameManager gameManager) {
@@ -39,6 +40,7 @@ public class ScreenManager {
         this.screens.put(GAMESTATE.LegResult, new LegResultScreen(gameManager));
         this.screens.put(GAMESTATE.Finalists, new FinalistsScreen(gameManager));
         this.screens.put(GAMESTATE.Medals, new MedalScreen(gameManager));
+        this.screens.put(GAMESTATE.Lost, new LostScreen(gameManager));
     }
 
     /**
