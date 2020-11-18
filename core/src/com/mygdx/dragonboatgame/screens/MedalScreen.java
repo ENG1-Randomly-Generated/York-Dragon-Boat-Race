@@ -93,7 +93,7 @@ public class MedalScreen extends AbstractScreen {
             for (Team team : teams) {
                 if (team == null) continue;
                 if (!team.hasQualified()) continue;
-                if (team.getLegTime(Game.leg) < minTime) {
+                if (team.getLegTime(Game.leg) <= minTime) {
                     minTime = team.getLegTime(Game.leg);
                     minTeam = team;
                 }
