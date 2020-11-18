@@ -3,6 +3,7 @@ package com.mygdx.dragonboatgame.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.Input;
@@ -25,6 +26,10 @@ public class BoatSelectionScreen extends AbstractScreen {
     private int[] maxStats = {0, 0, 0};
     private static HashMap<String, int[]> BOATS;
 
+    private GlyphLayout pickYourBoatText;
+    private GlyphLayout boatNameText;
+    private GlyphLayout pressEnterText;
+
 
     public BoatSelectionScreen(final GameManager gameManager) {
         super(gameManager);
@@ -33,6 +38,10 @@ public class BoatSelectionScreen extends AbstractScreen {
         shapeRenderer.setAutoShapeType(true);
         batch = new SpriteBatch();
         font = new BitmapFont(Gdx.files.internal("fonts/largefont.fnt"));
+
+        this.pickYourBoatText = registerText(font, "Pick Your Boat");
+        this.boatNameText = registerText(font, "Undefined");
+        this.pressEnterText = registerText(font, "Press ENTER to select");
     }
 
 
@@ -49,14 +58,14 @@ public class BoatSelectionScreen extends AbstractScreen {
         
         batch.draw(Boat.TEXTURE, Game.WIDTH / 6, Game.HEIGHT / 1.25f, Boat.SIZE.x, Boat.SIZE.y);
         batch.draw(Boat.TEXTURE, Game.WIDTH *4.5f/ 6, Game.HEIGHT / 1.25f, Boat.SIZE.x, Boat.SIZE.y);
-        font.draw(batch, currentBoatName, Game.WIDTH / 2.5f, Game.HEIGHT / 1.2f);
+        font.draw(batch, pickYourBoatText, Game.WIDTH / 2 - pickYourBoatText.width / 2, Game.HEIGHT / 1.05f);
+        font.draw(batch, boatNameText, Game.WIDTH / 2 - boatNameText.width / 2, Game.HEIGHT / 1.2f);
         font.draw(batch, "Speed", Game.WIDTH / 6, Game.HEIGHT / 1.5f);
         font.draw(batch, "Manoeuvrability", Game.WIDTH / 6, Game.HEIGHT / 2f);
         font.draw(batch, "Robustness", Game.WIDTH / 6, Game.HEIGHT / 3f);
-        font.draw(batch, "Previous: S", Game.WIDTH / 6, Game.HEIGHT / 10f);
+        font.draw(batch, "Previous: A", Game.WIDTH / 6, Game.HEIGHT / 10f);
         font.draw(batch, "Next: D", Game.WIDTH / 1.5f, Game.HEIGHT / 10f);
-        font.draw(batch, "Pick Your Boat", Game.WIDTH / 3.2f, Game.HEIGHT / 1.05f);
-        font.draw(batch, "Press ENTER to select", Game.WIDTH / 4f, Game.HEIGHT / 5f);
+        font.draw(batch, pressEnterText, Game.WIDTH / 2 - pressEnterText.width / 2, Game.HEIGHT / 5f);
         
         batch.end();
 
@@ -90,12 +99,21 @@ public class BoatSelectionScreen extends AbstractScreen {
         }
     }
 
+    /**
+     * Sets the currently displayed boat to the one at given index
+     * @param index Index of boat
+     */
+    private void displayBoat(int index) {
+        currentBoatName = boatNames[index];
+        currentBoatStats = BOATS.get(currentBoatName);
+        boatNameText = registerText(font, currentBoatName);
+    }
+
     @Override
     public void show() {
         BOATS = Game.getBoats();
         boatNames = BOATS.keySet().toArray(new String[BOATS.keySet().size()]);
-        currentBoatName = boatNames[currentBoatIndex];
-        currentBoatStats = BOATS.get(currentBoatName);
+        displayBoat(currentBoatIndex);
         this.maxStatsCalc();
     }
 
@@ -104,8 +122,7 @@ public class BoatSelectionScreen extends AbstractScreen {
         if (currentBoatIndex == -1) {
             currentBoatIndex = boatNames.length - 1;
         }
-        currentBoatName = boatNames[currentBoatIndex];
-        currentBoatStats = BOATS.get(currentBoatName);
+        displayBoat(currentBoatIndex);
     }
 
     private void nextBoat(){
@@ -113,8 +130,7 @@ public class BoatSelectionScreen extends AbstractScreen {
         if (currentBoatIndex == boatNames.length){
             currentBoatIndex = 0;
         }
-        currentBoatName = boatNames[currentBoatIndex];
-        currentBoatStats = BOATS.get(currentBoatName);
+        displayBoat(currentBoatIndex);
     }
 
 
