@@ -3,6 +3,7 @@ package com.mygdx.dragonboatgame.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.Input;
@@ -22,6 +23,9 @@ public class MedalScreen extends AbstractScreen {
     private Team[] positions;
     private boolean render;
 
+    private GlyphLayout resultsText;
+    private GlyphLayout enterText;
+
 
     public MedalScreen(final GameManager gameManager) {
         super(gameManager);
@@ -30,6 +34,9 @@ public class MedalScreen extends AbstractScreen {
         batch = new SpriteBatch();
         font = new BitmapFont(Gdx.files.internal("fonts/largefont.fnt"));
         this.render = false;
+
+        this.resultsText = registerText(font, "The results are in!");
+        this.enterText = registerText(font, "Press ENTER to exit");
     }
 
 
@@ -52,8 +59,8 @@ public class MedalScreen extends AbstractScreen {
 
         batch.draw(Boat.TEXTURE, Game.WIDTH / 6, Game.HEIGHT / 1.25f, Boat.SIZE.x, Boat.SIZE.y);
         batch.draw(Boat.TEXTURE, Game.WIDTH *4.5f/ 6, Game.HEIGHT / 1.25f, Boat.SIZE.x, Boat.SIZE.y);
-        font.draw(batch, "The results are in!", Game.WIDTH / 3.5f, Game.HEIGHT / 1.1f);
-        font.draw(batch, "Press ENTER to exit", Game.WIDTH / 4f, Game.HEIGHT / 5.5f);
+        font.draw(batch, resultsText, Game.WIDTH / 2 - resultsText.width / 2, Game.HEIGHT * 0.8f);
+        font.draw(batch, enterText, Game.WIDTH / 2 - enterText.width / 2, Game.HEIGHT * 0.1f);
 
         font.draw(batch, positions[0].name, Game.WIDTH / 2.4f, Game.HEIGHT / 1.5f);
         font.draw(batch, positions[1].name, Game.WIDTH / 2.4f, Game.HEIGHT / 2f);
