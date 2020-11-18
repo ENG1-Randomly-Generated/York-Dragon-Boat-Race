@@ -94,18 +94,22 @@ public class Game extends AbstractScreen {
         player.setPlaying(true);
         player.boat.setVisible(true);
         player.setPenalty(0);
+
+        int placed = 0;
         for (int i = 0; i < npcs.size(); i++) {
             NPC npc = npcs.get(i);
             if (Game.leg >= 4 && !npc.hasQualified()) continue; // Do not include this guy
 
-            laneDividers.put(npc, new Float[] {GRASS_BORDER_WIDTH + (seperation * (i+1)), GRASS_BORDER_WIDTH + (seperation * (i+2))});
+            laneDividers.put(npc, new Float[] {GRASS_BORDER_WIDTH + (seperation * (placed+1)), GRASS_BORDER_WIDTH + (seperation * (placed+2))});
             npc.boat.reset();
             npc.setPenalty(0);
-            npc.boat.setPos(new Vector(Game.GRASS_BORDER_WIDTH + (seperation * (i+1)) + seperation/2, 0));
+            npc.boat.setPos(new Vector(Game.GRASS_BORDER_WIDTH + (seperation * (placed+1)) + seperation/2, 0));
             npc.boat.setVisible(true);
             npc.setPlaying(true);
             npc.init();
+            placed++;
         }
+
         time = 0;
     }
 
