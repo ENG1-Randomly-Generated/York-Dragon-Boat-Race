@@ -135,7 +135,7 @@ public class Game extends AbstractScreen {
                 Team minTeam = null;
                 for (Team team : Game.getAllTeams()) {
                     if (team.hasQualified()) continue;
-                    if (team.getBestTime() < minTime) {
+                    if (team.getBestTime() <= minTime) {
                         minTime = team.getBestTime();
                         minTeam = team;
                     }
