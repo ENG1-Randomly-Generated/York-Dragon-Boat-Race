@@ -9,8 +9,9 @@ import com.mygdx.dragonboatgame.screens.GameManager;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.height = 720;
-		config.width = 1028;
+		config.height = 1920;
+		config.width = 1080;
+		config.fullscreen = true;
 		config.title = "Dragon Boat Game";
 		new LwjglApplication(new GameManager(), config);
 	}

@@ -34,7 +34,7 @@ public class Game extends AbstractScreen {
 
     public static final float WIDTH = Gdx.graphics.getWidth();
     public static final float HEIGHT = Gdx.graphics.getHeight();
-    public static final float MAP_HEIGHT = 1000;
+    public static final float MAP_HEIGHT = 2000;
     public static final float GRASS_BORDER_WIDTH = WIDTH/8;
     public static final Color GRASS_COLOR = new Color(36/255f, 115/255f, 35/255f, 1);
 
@@ -79,7 +79,7 @@ public class Game extends AbstractScreen {
     public static void startLeg(int leg) {
         // Start new leg
         Game.leg = leg;
-        generateObstacles(10 + (Game.leg * 5));
+        generateObstacles(20 + (Game.leg * 10));
 
         float seperation;
         if (Game.leg < 4) {
@@ -334,7 +334,8 @@ public class Game extends AbstractScreen {
      */
     public static void generateObstacles(int n) {
         for (int i = 0; i < n; i++) {
-            Vector newPos = new Vector(random.nextInt((int)(Game.WIDTH - (2*Game.GRASS_BORDER_WIDTH))) + Game.GRASS_BORDER_WIDTH, Boat.SIZE.y + random.nextInt((int)Game.MAP_HEIGHT - 200));
+            Vector newPos = new Vector(random.nextInt((int)(Game.WIDTH - (2*Game.GRASS_BORDER_WIDTH))) + Game.GRASS_BORDER_WIDTH,
+                    (Boat.SIZE.y * 2) + random.nextInt((int)Game.MAP_HEIGHT - 200));
             switch (Game.random.nextInt(4)) {
                 case 0:
                     addEntity(new Duck(newPos));
