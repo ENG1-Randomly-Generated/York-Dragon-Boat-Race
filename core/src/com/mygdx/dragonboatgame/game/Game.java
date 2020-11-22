@@ -235,16 +235,6 @@ public class Game extends AbstractScreen {
         camera.position.set(camera.position.x, Math.min(Math.max(player.boat.getPos().y, Game.HEIGHT/2), Game.MAP_HEIGHT - Game.HEIGHT/2), 0);
         camera.update();
 
-
-        // TODO: Remove
-        if (Gdx.input.isKeyJustPressed(Input.Keys.F1)) {
-            Game.player.boat.setPos(new Vector(player.boat.getPos().x, Game.MAP_HEIGHT));
-            for (NPC npc : npcs) {
-                npc.boat.setPos(new Vector(npc.boat.getPos().x, Game.MAP_HEIGHT));
-                npc.addPenalty(10f);
-            }
-        }
-
     }
 
     /**

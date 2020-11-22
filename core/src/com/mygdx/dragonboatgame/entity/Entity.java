@@ -18,7 +18,6 @@ import java.util.ArrayList;
  */
 public abstract class Entity {
 
-    public static boolean DEBUG_HITBOXES = false;
     public static float COLLISION_OFFSET = 5;
 
     public static ArrayList<Entity> entities = new ArrayList<Entity>();
@@ -106,15 +105,6 @@ public abstract class Entity {
         batch.begin();
         batch.draw(texture, pos.x, pos.y, size.x/2, size.y/2, size.x, size.y, 1f, 1f, rotation, 0, 0, texture.getWidth(), texture.getHeight(), false, false);
         batch.end();
-
-
-        if (DEBUG_HITBOXES) {
-            shapeRenderer.setProjectionMatrix(camera.combined);
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-            shapeRenderer.setColor(Color.RED);
-            shapeRenderer.rect(pos.x, pos.y, size.x, size.y);
-            shapeRenderer.end();
-        }
     }
 
 
