@@ -7,6 +7,12 @@ import com.mygdx.dragonboatgame.entity.Entity;
 import com.mygdx.dragonboatgame.game.Game;
 import com.mygdx.dragonboatgame.util.Vector;
 
+/**
+ * Represents a Goose Obstacle
+ *  A Goose moves randomly, has a moderate hardness, but moves more slowly
+ *
+ * @author Devon
+ */
 public class Goose extends Obstacle {
 
     private static Texture TEXTURE = new Texture(Gdx.files.internal("entity/goose.png"));

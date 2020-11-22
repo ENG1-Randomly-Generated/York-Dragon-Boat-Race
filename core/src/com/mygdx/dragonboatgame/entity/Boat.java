@@ -60,12 +60,14 @@ public class Boat extends DynamicEntity {
 
     /**
      * Reset the current boat for reuse
-     *  Resets energy & HP
+     *  Resets energy, HP and velocity/acceleration
      */
     public void reset() {
         this.energy = 100;
         this.robustness = max_robustness;
         this.non_accelerating_ticks = 0;
+        this.acceleration.clamp(0);
+        this.velocity.clamp(0);
     }
 
     /**
@@ -75,6 +77,7 @@ public class Boat extends DynamicEntity {
      * @param right Whether to accelerate right
      * @param down Whether to accelerate down
      * @param left Whether to accelerate left
+     * @param delta Delta time for the frame this is called
      */
     public void accelerate(boolean up, boolean right, boolean down, boolean left, float delta) {
         if (this.robustness == 0) return; // Cannot accelerate if dead
@@ -99,6 +102,7 @@ public class Boat extends DynamicEntity {
 
         if (dx == 0 && dy == 0) return;
 
+        // Remove energy for this acceleration
         this.energy -= 5 * delta;
         if (this.energy < 0) this.energy = 0;
 
@@ -106,6 +110,10 @@ public class Boat extends DynamicEntity {
         this.non_accelerating_ticks = 0;
     }
 
+    /**
+     * Damage the boat by the given float amount
+     * @param damage Damage to do to the boat
+     */
     public void damage(float damage) {
         this.robustness -= damage;
         if (this.robustness < 0) {
@@ -116,8 +124,9 @@ public class Boat extends DynamicEntity {
     /**
      * Return the damage modifier in the case of a collision with this boat
      *  e.g. take into account the velocity, acceleration, size, etc
+     *  This can be changed to include more features into the damage system
      *
-     * @return double modifier
+     * @return Double modifier of damage to boat
      */
     public float getDamageModifier() {
         return (this.getVelocity().getMagnitude() / (12 - (2 * Game.leg))) + 1;
@@ -128,8 +137,9 @@ public class Boat extends DynamicEntity {
 
         super.move(delta);
 
+        // Clamp our speed and acceleration to the maximum
         this.velocity.clamp(max_speed);
-        this.acceleration.clamp(maneuverability);
+        this.acceleration.clamp(base_acceleration);
     }
 
     @Override
@@ -139,6 +149,7 @@ public class Boat extends DynamicEntity {
     @Override
     public void tick(float delta) {
 
+        // If we haven't been accelerating for 1 second, start regaining energy
         if (this.non_accelerating_ticks > (1/delta)) {
             this.energy += 10 * delta;
             if (energy > 100) energy = 100;
@@ -198,6 +209,9 @@ public class Boat extends DynamicEntity {
      */
     public boolean isAlive() { return robustness > 0; }
 
-
+    /**
+     * Sets the team name for this boat that is displayed above it
+     * @param team_name Team name
+     */
     public void setTeam_name(String team_name) { this.team_name = team_name; }
 }

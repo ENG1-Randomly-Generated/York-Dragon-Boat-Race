@@ -4,6 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.dragonboatgame.util.Vector;
 
+/**
+ * Represents a Spectator
+ *
+ * @author Devon
+ */
 public class Spectator extends StaticEntity {
 
     public static Texture TEXTURE = new Texture(Gdx.files.internal("entity/spectator.png"));

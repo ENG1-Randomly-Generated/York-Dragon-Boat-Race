@@ -9,6 +9,7 @@ import com.mygdx.dragonboatgame.util.Vector;
 
 /**
  * Represents a movable obstacle in the game
+ *  Each obstacle has a hardness attribute which dictates how deadly/strong they are
  *
  * @author Devon
  */
@@ -25,6 +26,7 @@ public abstract class Obstacle extends DynamicEntity {
         this.hardness = 0;
     }
 
+    // Accessor methods
     public boolean isBreakable() { return breakable; }
     public void setBreakable(boolean breakable) { this.breakable = breakable; }
     public Texture getBrokenTexture() { return brokenTexture; }

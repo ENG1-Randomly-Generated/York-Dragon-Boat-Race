@@ -5,8 +5,15 @@ import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.dragonboatgame.entity.Boat;
 import com.mygdx.dragonboatgame.entity.DynamicEntity;
 import com.mygdx.dragonboatgame.entity.Entity;
+import com.mygdx.dragonboatgame.game.Game;
 import com.mygdx.dragonboatgame.util.Vector;
 
+/**
+ * Represents a Rock Obstacle
+ *  A Rock has major hardness and cannot be broken, but is stationary
+ *
+ * @author Devon
+ */
 public class Rock extends Obstacle {
 
     private static Texture TEXTURE = new Texture(Gdx.files.internal("entity/rock.png"));
@@ -15,7 +22,7 @@ public class Rock extends Obstacle {
     public Rock(Vector pos) {
         super(TEXTURE, pos, SIZE);
         this.setBreakable(false);
-        this.setHardness(1f);
+        this.setHardness((Game.leg / 4f));
     }
 
 

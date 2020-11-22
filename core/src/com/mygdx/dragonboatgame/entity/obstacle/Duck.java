@@ -8,6 +8,12 @@ import com.mygdx.dragonboatgame.entity.Entity;
 import com.mygdx.dragonboatgame.game.Game;
 import com.mygdx.dragonboatgame.util.Vector;
 
+/**
+ * Represents a Duck Obstacle within the game
+ *  A Duck moves randomly and has a relatively low hardness, but quickly erratic movements
+ *
+ * @author Devon
+ */
 public class Duck extends Obstacle {
 
     private static Texture TEXTURE = new Texture(Gdx.files.internal("entity/duck.png"));

@@ -21,6 +21,11 @@ public class Player extends Team {
     }
 
 
+    /**
+     * Check the player's current input and accelerate accordingly
+     *
+     * @param delta The frame's delta time
+     */
     private void checkInput(float delta) {
         boolean up = Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.UP);
         boolean right = Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT);

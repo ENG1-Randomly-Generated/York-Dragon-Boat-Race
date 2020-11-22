@@ -12,6 +12,7 @@ import java.util.ArrayList;
 /**
  * Represents an Entity within the game
  *  Each entity has it's own position, size and texture
+ *  Entity also handles collisions between entities
  *
  * @author Devon
  */
@@ -50,7 +51,7 @@ public abstract class Entity {
      * Returns whether the two entities are touching
      *
      * @param other Other entity
-     * @return Whether entities are touching
+     * @return Boolean whether entities are touching
      */
     public boolean isTouching(Entity other) {
         return (this.pos.x < other.pos.x + other.size.x - COLLISION_OFFSET)
@@ -62,7 +63,7 @@ public abstract class Entity {
     /**
      * Returns the entity this entity is touching, or null
      *
-     * @return The Entity touching this one, or null if nothing touching
+     * @return Entity the Entity touching this one, or null if nothing touching
      */
     public Entity getTouching() {
         for (Entity e : Entity.entities) {
@@ -93,6 +94,11 @@ public abstract class Entity {
     public float getRotation() { return rotation; }
     public void setRotation(float rotation) { this.rotation = rotation; }
 
+    /**
+     * Draw this Entity on the screen at it's given position, size and rotation
+     *
+     * @param camera Camera used to render the screen
+     */
     public void draw(Camera camera) {
         if (!isVisible) return;
 

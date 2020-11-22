@@ -22,7 +22,7 @@ public abstract class DynamicEntity extends Entity {
         this.acceleration = new Vector(0,0);
     }
 
-
+    // Velocity manipulation functions
     public void addVelocity(float x, float y) { this.velocity.add(x, y); }
     public void addVelocity(Vector velocity) {
         this.velocity.add(velocity);
@@ -35,43 +35,38 @@ public abstract class DynamicEntity extends Entity {
         return this.velocity;
     }
 
-    /**
-     * Set acceleration to given x, y
-     * @param x x axis acceleration
-     * @param y y axis acceleration
-     */
-    public void setAcceleration(float x, float y) {
-        this.acceleration.x = x;
-        this.acceleration.y = y;
-    }
-
+    // Acceleration manipulation functions
+    public void setAcceleration(float x, float y) { this.acceleration.x = x; this.acceleration.y = y; }
     public void addAcceleration(float x, float y) {
         this.acceleration.add(x, y);
     }
-
     public void addAcceleration(Vector acceleration) {
         this.acceleration.add(acceleration);
     }
-
     public Vector getAcceleration() {
         return this.acceleration;
     }
 
 
     /**
-     * Accelerate the current entity by our acceleration
+     * Accelerate the current entity and decrease the acceleration vector slightly
+     * @param delta Delta time of the frame
      */
     private void accelerate(float delta) {
         this.velocity.add(this.acceleration.multiply(delta));
         this.addAcceleration(this.acceleration.multiply(-1f * delta));
     }
 
+    /**
+     * Decelerate the current entity, such that velocity decreases steadily over time
+     * @param delta Delta time of the frame
+     */
     private void decelerate(float delta) {
         this.addVelocity(this.velocity.multiply(-0.3f * delta));
     }
 
     /**
-     * Moves the entity based on it's current velocity
+     * Moves the entity based on it's current velocity and acceleration
      */
     public void move(float delta) {
 
@@ -97,6 +92,10 @@ public abstract class DynamicEntity extends Entity {
     public abstract void onCollide(Entity other);
 
 
+    /**
+     * Default DynamicEntity tick to check for collisions and provide utility function onCollide()
+     * @param delta
+     */
     public void tick(float delta) {
         if (!this.isActive()) return;
 

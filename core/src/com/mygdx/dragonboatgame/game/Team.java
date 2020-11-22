@@ -43,7 +43,6 @@ public abstract class Team {
 
 
     public void addPenalty(float time) { this.penalty += time; }
-
     public void addTime(float time) {
         this.last_times.add(time);
     }

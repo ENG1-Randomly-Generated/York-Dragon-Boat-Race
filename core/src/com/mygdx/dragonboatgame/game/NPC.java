@@ -28,13 +28,19 @@ public class NPC extends Team {
         this.difficulty = difficulty;
     }
 
+    /**
+     * Initialise this NPC for use in the Game
+     *  This should be called at the start of every leg
+     */
     public void init() {
-        this.dividers = Game.getLaneDividers(this);
+        this.dividers = Game.getLaneDividers(this); // Update our dividers
     }
 
     /**
      * Return whether the current forward is clear for the NPC
      *  This is effected by difficulty
+     *
+     * @return Boolean whether forward is clear
      */
     private boolean isForwardClear() {
         int foresight = (300 * difficulty/10);
@@ -56,7 +62,9 @@ public class NPC extends Team {
 
     /**
      * Whether to dodge right (or left)
-     *  Sums a lot of factors up and uses numerical system for decision
+     *  Penalises either side based on the number of obstacles there are, and how
+     *      close the boat is to the divider
+     *
      * @return Whether to dodge right
      */
     private boolean dodgeRight() {
@@ -86,6 +94,17 @@ public class NPC extends Team {
     }
 
 
+    /**
+     * Calculate the next move for this NPC
+     *  Current algorithm is as such:
+     *      If energy > 0 and forward is clear of obstacles:
+     *          Accelerate forward, and left or right to try and stay in the middle of the lane
+     *      If energy > 0 BUT forward is not clear:
+     *          Accelerate right or left depending on dodgeRight()
+     *      If energy <= 0 then wait 4 seconds to regen energy
+     *
+     * @param delta The frame's delta time
+     */
     private void calculateMove(float delta) {
         if (accelerate_cooldown > System.currentTimeMillis()) return; // Do not make a move, we are on cooldown
 
