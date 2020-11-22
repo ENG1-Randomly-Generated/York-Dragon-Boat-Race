@@ -59,10 +59,10 @@ public class Game extends AbstractScreen {
      * Name (String) : Boat (Boat)
      */
     static {
-        // {max_speed, manovourability, max_robustness)
-        BOATS.put("Speedy", new int[] {42, 30, 10});
-        BOATS.put("Twisty", new int[] {40, 32, 10});
-        BOATS.put("Tanky", new int[] {38, 27, 15});
+        // {max_speed, manovourability, max_robustness, base_acceleration)
+        BOATS.put("Speedy", new int[] {42, 30, 10, 30});
+        BOATS.put("Twisty", new int[] {40, 32, 10, 32});
+        BOATS.put("Tanky", new int[] {38, 27, 15, 27});
 
         camera.setToOrtho(false);
         shapeRenderer.setAutoShapeType(true);
@@ -401,7 +401,7 @@ public class Game extends AbstractScreen {
     public static Boat getRandomBoat() {
         String randomBoat = (String) BOATS.keySet().toArray()[random.nextInt(BOATS.size() - 1)];
         int[] attrs = BOATS.get(randomBoat);
-        return new Boat(randomBoat, attrs[0], attrs[1], attrs[2]);
+        return new Boat(randomBoat, attrs[0], attrs[1], attrs[2], attrs[3]);
     }
 
     /**
@@ -422,7 +422,7 @@ public class Game extends AbstractScreen {
     public static Boat getNewBoat(String name) {
         if (!BOATS.containsKey(name)) throw new NullPointerException();
         int[] attrs = BOATS.get(name);
-        return new Boat(name, attrs[0], attrs[1], attrs[2]);
+        return new Boat(name, attrs[0], attrs[1], attrs[2], attrs[3]);
     }
 
 

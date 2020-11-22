@@ -23,7 +23,7 @@ public class BoatSelectionScreen extends AbstractScreen {
     private String currentBoatName;
     private int[] currentBoatStats;
     private String[] boatNames;
-    private int[] maxStats = {0, 0, 0};
+    private int[] maxStats = {0, 0, 0, 0};
     private static HashMap<String, int[]> BOATS;
 
     private GlyphLayout pickYourBoatText;
@@ -60,25 +60,28 @@ public class BoatSelectionScreen extends AbstractScreen {
         batch.draw(Boat.TEXTURE, Game.WIDTH *4.5f/ 6, Game.HEIGHT / 1.25f, Boat.SIZE.x, Boat.SIZE.y);
         font.draw(batch, pickYourBoatText, Game.WIDTH / 2 - pickYourBoatText.width / 2, Game.HEIGHT / 1.05f);
         font.draw(batch, boatNameText, Game.WIDTH / 2 - boatNameText.width / 2, Game.HEIGHT / 1.2f);
-        font.draw(batch, "Speed", Game.WIDTH / 6, Game.HEIGHT / 1.5f);
-        font.draw(batch, "Manoeuvrability", Game.WIDTH / 6, Game.HEIGHT / 2f);
-        font.draw(batch, "Robustness", Game.WIDTH / 6, Game.HEIGHT / 3f);
+        font.draw(batch, "Speed", Game.WIDTH / 6, Game.HEIGHT * 0.7f);
+        font.draw(batch, "Manoeuvrability", Game.WIDTH / 6, Game.HEIGHT * 0.6f);
+        font.draw(batch, "Robustness", Game.WIDTH / 6, Game.HEIGHT * 0.5f);
+        font.draw(batch, "Acceleration", Game.WIDTH / 6, Game.HEIGHT * 0.4f);
         font.draw(batch, "Previous: A", Game.WIDTH / 6, Game.HEIGHT / 10f);
         font.draw(batch, "Next: D", Game.WIDTH / 1.5f, Game.HEIGHT / 10f);
         font.draw(batch, pressEnterText, Game.WIDTH / 2 - pressEnterText.width / 2, Game.HEIGHT / 5f);
         
         batch.end();
 
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled); //42 32 15
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         
         shapeRenderer.setColor(Color.WHITE);
-        shapeRenderer.rect(Game.WIDTH / 1.8f, Game.HEIGHT / 1.6f, Game.WIDTH / 3.5f, font.getCapHeight());
-        shapeRenderer.rect(Game.WIDTH / 1.8f, Game.HEIGHT / 2.2f, Game.WIDTH / 3.5f, font.getCapHeight());
-        shapeRenderer.rect(Game.WIDTH / 1.8f, Game.HEIGHT / 3.4f, Game.WIDTH / 3.5f, font.getCapHeight());
+        shapeRenderer.rect(Game.WIDTH / 1.8f, Game.HEIGHT * 0.7f - font.getCapHeight(), Game.WIDTH / 3.5f, font.getCapHeight());
+        shapeRenderer.rect(Game.WIDTH / 1.8f, Game.HEIGHT * 0.6f - font.getCapHeight(), Game.WIDTH / 3.5f, font.getCapHeight());
+        shapeRenderer.rect(Game.WIDTH / 1.8f, Game.HEIGHT * 0.5f - font.getCapHeight(), Game.WIDTH / 3.5f, font.getCapHeight());
+        shapeRenderer.rect(Game.WIDTH / 1.8f, Game.HEIGHT * 0.4f - font.getCapHeight(), Game.WIDTH / 3.5f, font.getCapHeight());
         shapeRenderer.setColor(Color.RED);
-        shapeRenderer.rect(Game.WIDTH / 1.8f, Game.HEIGHT / 1.6f, (Game.WIDTH / 3.5f) * ((float) currentBoatStats[0] / maxStats[0]), font.getCapHeight());
-        shapeRenderer.rect(Game.WIDTH / 1.8f, Game.HEIGHT / 2.2f, (Game.WIDTH / 3.5f) * ((float) currentBoatStats[1] / maxStats[1]), font.getCapHeight());
-        shapeRenderer.rect(Game.WIDTH / 1.8f, Game.HEIGHT / 3.4f, (Game.WIDTH / 3.5f) * ((float) currentBoatStats[2] / maxStats[2]), font.getCapHeight());
+        shapeRenderer.rect(Game.WIDTH / 1.8f, Game.HEIGHT * 0.7f - font.getCapHeight(), (Game.WIDTH / 3.5f) * ((float) currentBoatStats[0] / maxStats[0]), font.getCapHeight());
+        shapeRenderer.rect(Game.WIDTH / 1.8f, Game.HEIGHT * 0.6f - font.getCapHeight(), (Game.WIDTH / 3.5f) * ((float) currentBoatStats[1] / maxStats[1]), font.getCapHeight());
+        shapeRenderer.rect(Game.WIDTH / 1.8f, Game.HEIGHT * 0.5f - font.getCapHeight(), (Game.WIDTH / 3.5f) * ((float) currentBoatStats[2] / maxStats[2]), font.getCapHeight());
+        shapeRenderer.rect(Game.WIDTH / 1.8f, Game.HEIGHT * 0.4f - font.getCapHeight(), (Game.WIDTH / 3.5f) * ((float) currentBoatStats[3] / maxStats[3]), font.getCapHeight());
         
         shapeRenderer.end();
     }
@@ -140,10 +143,10 @@ public class BoatSelectionScreen extends AbstractScreen {
      *
      */
     private void maxStatsCalc() {
-        maxStats = new int[] {0,0,0};
+        maxStats = new int[] {0,0,0,0};
         for (Map.Entry<String, int[]> entry : Game.getBoats().entrySet()) {
             int[] vals = entry.getValue();
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 4; i++) {
                 maxStats[i] = Math.max(maxStats[i], vals[i]);
             }
         }

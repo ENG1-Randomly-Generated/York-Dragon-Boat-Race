@@ -29,6 +29,7 @@ public class Boat extends DynamicEntity {
     public final float max_speed;
     public final float maneuverability;
     public final float max_robustness;
+    public final float base_acceleration;
 
     public float robustness;
     public float energy;
@@ -38,13 +39,14 @@ public class Boat extends DynamicEntity {
     private BitmapFont font;
     private SpriteBatch batch;
 
-    public Boat(String name, float max_speed, float maneuverability, float max_robustness) {
+    public Boat(String name, float max_speed, float maneuverability, float max_robustness, float base_acceleration) {
         super(TEXTURE, new Vector(0, 0), SIZE);
 
         this.name = name;
         this.max_speed = max_speed;
         this.maneuverability = maneuverability;
         this.max_robustness = max_robustness;
+        this.base_acceleration = base_acceleration;
         this.robustness = max_robustness;
         this.energy = 100;
         this.shapeRenderer = new ShapeRenderer();
@@ -83,13 +85,13 @@ public class Boat extends DynamicEntity {
         float dy = 0;
 
         if (up) {
-            dy += maneuverability * delta;
+            dy += base_acceleration * delta;
         }
         if (right) {
             dx += maneuverability * delta;
         }
         if (down) {
-            dy -= maneuverability * delta;
+            dy -= base_acceleration * delta;
         }
         if (left) {
             dx -= maneuverability * delta;
@@ -186,10 +188,16 @@ public class Boat extends DynamicEntity {
      * @return Boat object with exact same attributes
      */
     public Boat clone() {
-        return new Boat(this.name, this.max_speed, this.maneuverability, this.max_robustness);
+        return new Boat(this.name, this.max_speed, this.maneuverability, this.max_robustness, this.base_acceleration);
     }
 
+    /**
+     * Returns whether this boat is alive
+     *  i.e. whether this boat's current robustness is not 0
+     * @return Boolean whether boat is alive
+     */
     public boolean isAlive() { return robustness > 0; }
+
 
     public void setTeam_name(String team_name) { this.team_name = team_name; }
 }
