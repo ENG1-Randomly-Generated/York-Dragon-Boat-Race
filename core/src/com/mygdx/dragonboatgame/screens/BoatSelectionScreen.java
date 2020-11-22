@@ -47,7 +47,19 @@ public class BoatSelectionScreen extends AbstractScreen {
 
     @Override
     public void tick(float delta) {
-        checkInput();
+        boolean right = Gdx.input.isKeyJustPressed(Input.Keys.D) || Gdx.input.isKeyJustPressed(Input.Keys.RIGHT);
+        boolean left = Gdx.input.isKeyJustPressed(Input.Keys.A) || Gdx.input.isKeyJustPressed(Input.Keys.LEFT);
+        boolean enter = Gdx.input.isKeyJustPressed(Input.Keys.ENTER);
+
+        if (left) {
+            previousBoat();
+        } else if (right) {
+            nextBoat();
+        } else if (enter) {
+            // Set the boat of the player here
+            Game.player.setBoat(Game.getNewBoat(currentBoatName));
+            gameManager.sm.setScreen(ScreenManager.GAMESTATE.Controls);
+        }
     }
 
     @Override
@@ -86,21 +98,6 @@ public class BoatSelectionScreen extends AbstractScreen {
         shapeRenderer.end();
     }
 
-    private void checkInput() {
-        boolean right = Gdx.input.isKeyJustPressed(Input.Keys.D) || Gdx.input.isKeyJustPressed(Input.Keys.RIGHT);
-        boolean left = Gdx.input.isKeyJustPressed(Input.Keys.A) || Gdx.input.isKeyJustPressed(Input.Keys.LEFT);
-        boolean enter = Gdx.input.isKeyJustPressed(Input.Keys.ENTER);
-
-        if (left) {
-            previousBoat();
-        } else if (right) {
-            nextBoat();
-        } else if (enter) {
-            // Set the boat of the player here
-            Game.player.setBoat(Game.getNewBoat(currentBoatName));
-            gameManager.sm.setScreen(ScreenManager.GAMESTATE.DragonBoatGame);
-        }
-    }
 
     /**
      * Sets the currently displayed boat to the one at given index
